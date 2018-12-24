@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0" />
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<title>每日打卡</title>
+<link rel="stylesheet" href="static/css/base.css">
+<script src="static/js/conversion.750.js"></script>
+<script src="static/js/zepto.min.js" charset="utf-8"></script>
+</head>
+
+<body>
+<div class="punch_page">
+	<div class="punch_head">
+		<div class="tip">今日学习时长尚未达标，不能打卡哦，继续学习吧~</div>
+		<img class="img" src="static/images/dk_top.png" alt="">
+		
+		<div class="txt">已连续打卡<span>100</span>天</div>
+		<div class="btn" id="punchBtn">今日已打卡</div>
+		<a class="xxjh_btn" href="punch-target.html">设定学习计划<i class="icons ico_tri"></i></a>
+	</div>
+
+	<ul class="punch_data">
+		<li class="li_date clearfix">
+			<em><i class="icons"></i></em>
+			<span class="num">100</span>
+			<p>最长连续打卡(天)</p>
+		</li>
+		<li class="li_score clearfix">
+			<em><i class="icons"></i></em>
+			<span class="num">90</span>
+			<p>闯关最高(分)</p>
+		</li>
+		<li class="li_time clearfix">
+			<em><i class="icons"></i></em>
+			<span class="num">32</span>
+			<p>学习时长(分钟)</p>
+		</li>
+	</ul>
+
+	<div class="share_btn_box">
+		<a href="javascript:;"><i class="icons ico_share"></i><span>分享</span></a>
+	</div>
+</div>
+	
+<div class="mask_bg pop_show" style="display:none;" id="punch_pop">
+    <div class="mask_bg_ctn">
+         
+        <div class="punch_pop animated5 bounceIn">
+			<span class="icons ico_close close_btn"></span>
+			<img class="img" src="static/images/dkcg_img.png" alt="">
+			<p>累计打开第<span>100</span>天</p>
+			<a class="yellow_btn close_btn" href="javascript:;">我知道了</a>
+		</div>
+         
+    </div>
+</div>
+<script src="static/js/common.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('#punchBtn').on('click',function(){
+		$('#punch_pop').show();
+	});
+	
+	$('.close_btn').on('click',function(){
+		$(this).parents('.mask_bg').hide();
+	});
+});
+</script>
+</body>
+</html>

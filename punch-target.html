@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0" />
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<title>打卡目标</title>
+<link rel="stylesheet" href="static/css/base.css">
+<script src="static/js/conversion.750.js"></script>
+<script src="static/js/zepto.min.js" charset="utf-8"></script>
+</head>
+
+<body>
+<style>
+	html,body{background:#f7f7f7;}
+</style>
+
+<div class="punch_target">
+	<div class="punch_time_mdl">
+		<div class="punch_circle">
+			<div class="punch_circle_main">
+				<p>每日目标</p>
+				<h3>30</h3>
+				<p>分钟</p>
+			</div>
+			<img class="cloud01 cloud" src="static/images/cloud_img01.png" alt="">
+			<img class="cloud02 cloud" src="static/images/cloud_img01.png" alt="">
+			<img class="cloud03 cloud" src="static/images/cloud_img02.png" alt="">
+		</div>
+		
+		<div class="punch_time_num">
+			<ul class="num_list">
+				<li>5 min</li>
+				<li>10 min</li>
+				<li>15 min</li>
+				<li>30 min</li>
+				<li>45 min</li>
+				<li>60 min</li>
+			</ul>
+			<ul class="time_list">
+				<li data-min='5'><i class="icons ico_gou"></i></li>
+				<li data-min='10'><i class="icons ico_gou"></i></li>
+				<li data-min='15'><i class="icons ico_gou"></i></li>
+				<li data-min='30' class="act"><i class="icons ico_gou"></i></li>
+				<li data-min='45'><i class="icons ico_gou"></i></li>
+				<li data-min='60'><i class="icons ico_gou"></i></li>
+			</ul>
+		</div>
+		<div class="tip_txt">
+			<p>每日学习的课程内容（speaking、quiz）将计入学习时长中五行汉语只记录在单词或句子中的学习时间</p>
+		</div>
+	</div>
+	<ul class="punch_target_btn">
+		<li><a href="javascript:;">
+			<h4><i class="icons ico_email"></i>邮箱提醒</h4>
+			<span>通过绑定邮箱提醒您学习</span>
+			<i class="icons ico_tri"></i>
+		</a></li>
+		<li>
+			<h4><i class="icons ico_day"></i>每日提醒</h4>
+			<div class="on_off_btn">
+				<input type="checkbox" name="tip" id="tipBtn"  />
+				<label for="tipBtn"></label>
+			</div>
+		</li>
+	</ul>
+	<div class="gray_txt">需先开启【通知权限】才能打开每日提醒哦</div>
+</div>
+<script src="static/js/common.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('.time_list li').on('click',function(){
+		var  minVal = $(this).attr('data-min');
+		var colorVal = $(this).css('background-color');
+		$(this).addClass('act').siblings().removeClass('act');
+		$('.punch_circle_main').css('background-color',colorVal);
+		$('.punch_circle_main h3').text(minVal);
+	});
+});
+</script>
+</body>
+</html>
