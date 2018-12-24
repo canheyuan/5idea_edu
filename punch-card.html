@@ -13,30 +13,30 @@
 </head>
 
 <body>
-<div class="punch_page">
+<div class="punch_page un_punch">
 	<div class="punch_head">
 		<div class="tip">今日学习时长尚未达标，不能打卡哦，继续学习吧~</div>
 		<img class="img" src="static/images/dk_top.png" alt="">
 		
-		<div class="txt">已连续打卡<span>100</span>天</div>
-		<div class="btn" id="punchBtn">今日已打卡</div>
+		<div class="txt">已连续打卡<span id="lastPunchDay">0</span>天</div>
+		<div class="btn" id="punchBtn">今日学习时长尚未达标</div>
 		<a class="xxjh_btn" href="punch-target.html">设定学习计划<i class="icons ico_tri"></i></a>
 	</div>
 
 	<ul class="punch_data">
 		<li class="li_date clearfix">
 			<em><i class="icons"></i></em>
-			<span class="num">100</span>
+			<span class="num" id="maxPunchDay">0</span>
 			<p>最长连续打卡(天)</p>
 		</li>
 		<li class="li_score clearfix">
 			<em><i class="icons"></i></em>
-			<span class="num">90</span>
+			<span class="num">0</span>
 			<p>闯关最高(分)</p>
 		</li>
 		<li class="li_time clearfix">
 			<em><i class="icons"></i></em>
-			<span class="num">32</span>
+			<span class="num" id="studiedTime">0</span>
 			<p>学习时长(分钟)</p>
 		</li>
 	</ul>
@@ -52,7 +52,7 @@
         <div class="punch_pop animated5 bounceIn">
 			<span class="icons ico_close close_btn"></span>
 			<img class="img" src="static/images/dkcg_img.png" alt="">
-			<p>累计打开第<span>100</span>天</p>
+			<p>累计打开第<span>0</span>天</p>
 			<a class="yellow_btn close_btn" href="javascript:;">我知道了</a>
 		</div>
          
@@ -61,13 +61,61 @@
 <script src="static/js/common.js"></script>
 <script type="text/javascript">
 $(function(){
+	var checkData = null;
+	
 	$('#punchBtn').on('click',function(){
-		$('#punch_pop').show();
+		if(checkData.status == 0 && checkData.studiedTime > checkData.targetTime){
+		   punchCard();
+		}else{
+			
+		}
 	});
 	
 	$('.close_btn').on('click',function(){
 		$(this).parents('.mask_bg').hide();
 	});
+	
+	//打卡查询
+	common.ajaxFn({
+		url:'/api/userPunch/detail',
+		success:(res) => {
+			checkData = res.data;
+			console.log('打卡查询：',checkData);
+			var punchBtnTxt = '';
+			if(checkData.status == 1){
+				$('.punch_page').removeClass('un_punch');
+				checkData.punchBtnTxt = '今日已打卡';
+			}else{
+				if(checkData.studiedTime < checkData.targetTime){
+					checkData.punchBtnTxt = '今日学习时长尚未达标';
+				}else{
+					$('.punch_page').removeClass('un_punch');
+					checkData.punchBtnTxt = '立即打卡';
+				}
+			};
+			$('#punchBtn').text(checkData.punchBtnTxt);
+			$('#lastPunchDay').text(checkData.lastPunchDay);
+			$('#maxPunchDay').text(checkData.maxPunchDay);
+			$('#studiedTime').text(parseInt(checkData.studiedTime/60));
+		}
+	});
+	
+	//打卡操作
+	function punchCard(){
+		common.ajaxFn({
+			url:'/api/userPunch/punchCard',
+			type:'POST',
+			success:(res) => {
+				console.log('打卡操作：',res.data);
+				$('#punch_pop').show();
+			}
+		});
+	}
+	
+	
+	
+	
+	
 });
 </script>
 </body>

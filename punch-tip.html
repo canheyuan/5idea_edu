@@ -6,7 +6,7 @@
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
 <meta content="telephone=no" name="format-detection">
-<title>每日打卡</title>
+<title>打卡</title>
 <link rel="stylesheet" href="static/css/base.css">
 <script src="static/js/conversion.750.js"></script>
 <script src="static/js/zepto.min.js" charset="utf-8"></script>
@@ -20,12 +20,26 @@
 	<div class="punch_tip_box animated bounceInDown">
 		<div class="punch_tip_main">
 			<div class="title">可以打卡啦！</div>
-			<div class="learn_time">您已学习<span>32</span>分钟</div>
-			<div class="txt">已连续打卡232天</div>
+			<div class="learn_time">您已学习<span id="studiedTime">0</span>分钟</div>
+			<div class="txt">已连续打卡<span id="lastPunchDay">0</span>天</div>
 			<a class="yellow_btn" href="punch-card.html">去打卡</a>
 		</div>
 	</div>
 </div>
 <script src="static/js/common.js"></script>
+<script>
+$(function(){
+	//打卡查询
+	common.ajaxFn({
+		url:'/api/userPunch/detail',
+		success:(res) => {
+			var checkData = res.data;
+			console.log('打卡查询：',checkData);
+			$('#lastPunchDay').text(checkData.lastPunchDay);
+			$('#studiedTime').text(parseInt(checkData.studiedTime/60));
+		}
+	});
+});
+</script>
 </body>
 </html>

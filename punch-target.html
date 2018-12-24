@@ -71,13 +71,28 @@
 <script src="static/js/common.js"></script>
 <script type="text/javascript">
 $(function(){
+	var minVal = 0;
 	$('.time_list li').on('click',function(){
-		var  minVal = $(this).attr('data-min');
+		minVal = $(this).attr('data-min');
 		var colorVal = $(this).css('background-color');
 		$(this).addClass('act').siblings().removeClass('act');
 		$('.punch_circle_main').css('background-color',colorVal);
 		$('.punch_circle_main h3').text(minVal);
+		punchTargetFn(minVal);
 	});
+	
+	function punchTargetFn(min){
+		common.ajaxFn({
+			url:'/api/userPunch/updateTarget',
+			data:{
+				targetTime:min
+			},
+			type:'POST',
+			success:(res) => {
+				
+			}
+		});
+	}
 });
 </script>
 </body>
