@@ -80,14 +80,15 @@ a.a_red:visited, a.a_red:hover { color: #d9242b; }
 }
 
 /*通用弹窗*/
-.mask_bg{background:rgba(0,0,0,.8); height:100%; width:100%; position:fixed; top:0; left:0; display:table;z-index: 10000; opacity:0; -webkit-transition:all .3s; transition:all .3s;}
+.mask_bg{background:rgba(0,0,0,.8); height:100%; width:100%; position:fixed; top:0; left:0; display:table;z-index: 10000; opacity:1; -webkit-transition:all .3s; transition:all .3s;}
 .mask_bg_ctn{display:table-cell; vertical-align:middle; text-align:center;}
-.mask_bg.pop_show{opacity:1;}
+.pop_mdl{background:#fff; border-radius:.1rem; padding:.2rem; width:90%; box-sizing:border-box; margin:0 auto; position:relative;}
+.pop_mdl .close_ico{position:absolute; top:0; right:0; font-size:.6rem; color:#666; width:.8rem; height:.8rem; text-align: center; line-height:.8rem;}
 
 /*-------- 每日打卡 ---------*/
 .punch_head{position:relative;width:100%;}
 .punch_head .img{width:100%;}
-.punch_head .tip{height:.8rem; line-height:.8rem; background:#f85f5f; font-size:.28rem; color:#fff; padding:0 .2rem; position:absolute; left:0; top:0; z-index:9; width:100%; display:none;}
+.punch_head .tip{height:.8rem; line-height:.8rem; background:#ffa800; font-size:.28rem; color:#fff; padding:0 .2rem; position:absolute; left:0; top:0; z-index:9; width:100%; display:none;}
 .punch_head .txt{position:absolute; left:0; top:.6rem; font-size:.56rem; color:#fff; width:100%; text-align: center; line-height:.8rem; letter-spacing:.06rem;text-shadow:.04rem .04rem .04rem #3e79ff; }
 /*.punch_head .txt_bg{left:.04rem; top:.64rem; color:#3e79ff; }*/
 .punch_head .txt span{color:#ffc10a; font-size:.72rem; line-height:.8rem;letter-spacing:0; vertical-align: top; margin-right:.1rem;}

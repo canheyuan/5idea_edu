@@ -10,6 +10,18 @@
 <link rel="stylesheet" href="static/css/base.css">
 <script src="static/js/conversion.750.js"></script>
 <script src="static/js/zepto.min.js" charset="utf-8"></script>
+<script src="static/js/shell.js" charset="utf-8"></script>
+<script>
+Shell.init();
+//设置页面标题栏
+var param = {
+	name: "punch-tip",
+	title: "打卡",
+	leftIcon: "back",		//or "close" ，缺省即back
+	backgroundColor: "#00ffffff"	//不设则默认白色
+}
+Shell.setPageTitle(JSON.stringify(param));
+</script>
 </head>
 
 <body>
@@ -29,16 +41,21 @@
 <script src="static/js/common.js"></script>
 <script>
 $(function(){
-	//打卡查询
-	common.ajaxFn({
-		url:'/api/userPunch/detail',
-		success:(res) => {
-			var checkData = res.data;
-			console.log('打卡查询：',checkData);
-			$('#lastPunchDay').text(checkData.lastPunchDay);
-			$('#studiedTime').text(parseInt(checkData.studiedTime/60));
-		}
+	//获取用户id再执行函数
+	Shell.getSessionId(function(res){
+		common.sessionId = res;
+		//打卡查询
+		common.ajaxFn({
+			url:'/api/userPunch/detail',
+			success:(res) => {
+				var checkData = res.data;
+				console.log('打卡查询：',checkData);
+				$('#lastPunchDay').text(checkData.lastPunchDay);
+				$('#studiedTime').text(parseInt(checkData.studiedTime/60));
+			}
+		});
 	});
+	
 });
 </script>
 </body>

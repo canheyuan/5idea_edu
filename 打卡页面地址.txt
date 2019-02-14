@@ -1,0 +1,12 @@
+1、打卡：
+https://test.5ideachinese.com/profile/frontend/punch-card.html
+
+2、打卡指引：
+https://test.5ideachinese.com/profile/frontend/punch-guide.html
+
+3、打卡提示：
+https://test.5ideachinese.com/profile/frontend/punch-tip.html
+
+4、打卡目标：
+https://test.5ideachinese.com/profile/frontend/punch-target.html
+

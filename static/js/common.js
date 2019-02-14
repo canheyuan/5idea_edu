@@ -1,5 +1,15 @@
+
 let common = {
-	apiUrl : 'http://192.168.0.244:8090',	//接口前缀
+	//获取地址参数值
+	GetQueryStringFn:(name) => {
+		 var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		 var r = window.location.search.substr(1).match(reg);
+		 if(r!=null)return decodeURIComponent(r[2]); return null;
+	},
+	apiUrl : location.protocol+'//'+location.host,	//接口前缀
+	//apiUrl : 'http://192.168.0.244:8090',	//接口前缀
+	sessionId:'',	//用户id
+	currentLang = 'en',	//当前语言
 	tipShow: true,	//是否显示打印消息
 	//通用的ajax调用
 	ajaxFn : (options) => {
@@ -25,6 +35,9 @@ let common = {
 		if(opt.isLoading){ $('#loading').show(); }
 		$.ajax({
 			url : common.apiUrl + opt.url,
+			headers:{
+				'5idea-sid':common.sessionId
+			},
 			data: opt.data,
 			type: opt.type,
 			dataType: opt.dataType,
@@ -100,6 +113,7 @@ let common = {
 		common.loading();
 	}
 };
+
 common.init();
 
 //点击:active效果

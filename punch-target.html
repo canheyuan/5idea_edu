@@ -10,6 +10,21 @@
 <link rel="stylesheet" href="static/css/base.css">
 <script src="static/js/conversion.750.js"></script>
 <script src="static/js/zepto.min.js" charset="utf-8"></script>
+<script src="static/js/shell.js" charset="utf-8"></script>
+<script>
+Shell.init();
+//设置页面标题栏
+var param = {
+	name: "punch-target",
+	title: "打卡目标",
+	leftIcon: "back",		//or "close" ，缺省即back
+	rightText: "保存",		//不设此项则不显示右侧文字按钮
+	rightTextColor: "#1788D2",
+	rightTextIcon: "book",	//or "book"
+	backgroundColor: "#ffffff"	//不设则默认白色
+}
+Shell.setPageTitle(JSON.stringify(param));
+</script>
 </head>
 
 <body>
@@ -22,7 +37,7 @@
 		<div class="punch_circle">
 			<div class="punch_circle_main">
 				<p>每日目标</p>
-				<h3>30</h3>
+				<h3 id="targetTime">30</h3>
 				<p>分钟</p>
 			</div>
 			<img class="cloud01 cloud" src="static/images/cloud_img01.png" alt="">
@@ -43,7 +58,7 @@
 				<li data-min='5'><i class="icons ico_gou"></i></li>
 				<li data-min='10'><i class="icons ico_gou"></i></li>
 				<li data-min='15'><i class="icons ico_gou"></i></li>
-				<li data-min='30' class="act"><i class="icons ico_gou"></i></li>
+				<li data-min='30'><i class="icons ico_gou"></i></li>
 				<li data-min='45'><i class="icons ico_gou"></i></li>
 				<li data-min='60'><i class="icons ico_gou"></i></li>
 			</ul>
@@ -53,11 +68,13 @@
 		</div>
 	</div>
 	<ul class="punch_target_btn">
+<!--
 		<li><a href="javascript:;">
 			<h4><i class="icons ico_email"></i>邮箱提醒</h4>
 			<span>通过绑定邮箱提醒您学习</span>
 			<i class="icons ico_tri"></i>
 		</a></li>
+-->
 		<li>
 			<h4><i class="icons ico_day"></i>每日提醒</h4>
 			<div class="on_off_btn">
@@ -71,16 +88,39 @@
 <script src="static/js/common.js"></script>
 <script type="text/javascript">
 $(function(){
-	var minVal = 0;
+	var targetTime = '';
+	
+	//获取用户id再执行函数
+	Shell.getSessionId(function(res){
+		common.sessionId = res;
+		punchCheck();
+		
+	});
+	var minVal = 0;	//打卡目标选择的值
 	$('.time_list li').on('click',function(){
 		minVal = $(this).attr('data-min');
 		var colorVal = $(this).css('background-color');
 		$(this).addClass('act').siblings().removeClass('act');
 		$('.punch_circle_main').css('background-color',colorVal);
 		$('.punch_circle_main h3').text(minVal);
-		punchTargetFn(minVal);
 	});
 	
+	//监听标题栏右侧按钮事件
+	Shell.addListener({event:"EVENT_ACTION_PRESSED",callback:function(){
+		//var nowTime = parseInt($('.time_list li.act').attr('data-min'));
+		if(targetTime == minVal){
+		   common.addTocarTips('未修改打卡目标');
+		}else{
+			punchTargetFn(minVal);
+		}
+	}});
+	
+	$('#tipBtn').change(function(e){
+		var statusCode = $(this).prop('checked')?1:0;
+		punchTipStatusFn(statusCode);
+	});
+	
+	//修改打卡目标
 	function punchTargetFn(min){
 		common.ajaxFn({
 			url:'/api/userPunch/updateTarget',
@@ -89,10 +129,47 @@ $(function(){
 			},
 			type:'POST',
 			success:(res) => {
+				common.addTocarTips('保存成功');
+			}
+		});
+	};
+	
+	//打卡查询
+	function punchCheck(){
+		common.ajaxFn({
+			url:'/api/userPunch/detail',
+			success:(res) => {
+				targetTime = res.data.targetTime/60;
+				$('#targetTime').text(targetTime);
+				$('.time_list li').each(function(){
+					var tTime = parseInt($(this).attr('data-min'));
+					if(targetTime == tTime){
+					   $(this).addClass('act');
+						minVal = tTime
+					}
+				});
 				
+				//打卡提示状态
+				var remind = res.data.remind;
+				$('#tipBtn').prop('checked',(remind==0?false:true));
 			}
 		});
 	}
+	
+	//修改打卡更新状态
+	function punchTipStatusFn(status){
+		common.ajaxFn({
+			url:'/api/userPunch/updateRemind',
+			data:{
+				remind:status	//状态0：关闭，1：开启
+			},
+			type:'POST',
+			success:(res) => {
+				
+			}
+		});
+	};
+	
 });
 </script>
 </body>
