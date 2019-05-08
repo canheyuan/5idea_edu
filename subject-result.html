@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0" />
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<title>测试报告分享</title>
+<link rel="stylesheet" href="static/css/reset.css">
+<link rel="stylesheet" href="static/css/share.css">
+<link rel="stylesheet" href="static/css/subject.css">
+<script src="static/js/conversion.750.js"></script>
+<script src="static/js/zepto.min.js" charset="utf-8"></script>
+<script src="static/js/vue.js" charset="utf-8"></script>
+<script src="static/js/shell.js" charset="utf-8"></script>
+<script>
+Shell.init();
+</script>
+</head>
+
+<body class="gray_body">
+<div id="app" v-cloak>
+	
+<!--测试报告头部-->
+<div class="report_head">
+	<div class="report_top">
+		<div class="title">测试报告</div>
+		<div class="report_progress">
+		
+			<div class="progress" id="indicatorContainer"></div>
+			<div class="progress_data">
+				<p>Your level</p>
+				<h3>Lv.2</h3>
+				<span>2019-08-12</span>
+			</div>
+			
+		</div>
+	</div>
+	
+	<div class="report_data" v-if="reportData.length!=0">
+		<div class="report_title"><i class="icons ico_report"></i>WHAT YOU CAN DO</div>
+		<ul class="report_list">
+			<li class="act" v-for="item in reportData">
+				<span class="cir"><i class="icons"></i></span>
+				<p>{{item[currentLang]}}</p>
+			</li>
+<!--
+			<li class="act">
+				<span class="cir"><i class="icons"></i></span>
+				<p>测试长度因人而异，厉害的才能测完全部3个部分</p>
+			</li>
+			<li>
+				<span class="cir"><i class="icons"></i></span>
+				<p>只有一次中途退出的机会</p>
+			</li>
+			<li>
+				<span class="cir"><i class="icons"></i></span>
+				<p>Phone销量下滑的幅度超出了预期</p>
+			</li>
+			<li>
+				<span class="cir"><i class="icons"></i></span>
+				<p>来自供应链的许多警告信号表明</p>
+			</li>
+			<li>
+				<span class="cir"><i class="icons"></i></span>
+				<p>但是，情况比我们想象的更糟</p>
+			</li>
+-->
+		</ul>
+	</div>
+</div>
+	
+<div class="report_ad" style="background:url(static/images/share_ad01.png) no-repeat; background-size:100% auto;">
+	<h3>IMPROVE PLAN</h3>
+	<p>只有适合自己的学习方案，才能针对性的针对自己的弱点，获得高效提升</p>
+</div>
+	
+<div style="text-align: center">
+	<div class="share_btn">
+		<i class="icons ico_share"></i><span>分享</span>
+	</div>	
+</div>
+<div style="height:1.2rem;"></div>
+	
+<a href="javascript:;" class="plan_btn">定制专属学习计划</a>
+	
+</div>	
+	
+<script src="static/js/radialIndicator.js"></script>
+<script src="static/js/common.js"></script>
+<script>
+
+	
+//vue实例加载完后执行的函数
+function vmCreated(){
+
+	//设置页面标题栏
+	var param = {
+		name: "share-report",
+		title: '测试报告',	
+		leftIcon: "back",		//or "close" ，缺省即back
+		backgroundColor: "#00ffffff"	//不设则默认白色
+	}
+	Shell.setPageTitle(JSON.stringify(param));
+	$('title').text('测试报告');
+	
+	var radialObj = radialIndicator('#indicatorContainer', {
+		barColor: '#ffffff',
+		barBgColor:'rgba(255,255,255,.2)',	//外框背景色
+		radius: $('.report_progress').height()/2-9,
+		barWidth: 9,
+		initValue: 0,
+		displayNumber: false,
+		roundCorner : true,
+		percentage: true
+	});
+	
+	common.ajaxFn({
+		url:`/api/shareInfo/userExamShareInfo/${common.shareId}`,
+		success:(res)=>{
+			var datas =  res.data;
+			vm.checkShareData = datas;
+			radialObj.animate(parseInt(100*datas.level/6));
+			
+			$.ajax({
+				url:`static/json/report.json`,
+				type: 'get',
+				dataType: "json",
+				success:(res)=>{
+					console.log(res);
+					vm.reportData = res[datas.level-1].content;
+				},
+			});
+		}
+	});
+	
+
+}
+
+
+$(function(){
+	//获取用户id再执行函数
+	Shell.getSessionId(function(res){
+		common.sessionId = res;
+		common.vueIsLoad && vmCreated();
+	});
+	
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{
+	"punchCard":{
+		"title":"Clocking",
+		"headRightTxt":"About clock",
+		"notReachTip":"Daily learning time does not meet your standard. Please continuou to learn then complete clocking.",	
+		"headText":"Clocked",
+		"dayText":"days",	
+		"btnNoReach":"To be completed",
+		"btnReach":"Clock",
+		"btnFinished":"Clocked",
+		"btnLearnPlan":"Set a study plan",
+		"punchMaxDay":"Cumulative Days",
+		"emigrateStroe":"MAX of challenge",
+		"learnTime":"Learning Time (Min)",
+		"shareTxt":"Share",
+		"punchSuccessTxt":"Clocked done",
+		"popText01":"Cumulative Days ",
+		"popBtn":"Got it"
+	},
+	"punchGuide":{
+		"title":"About clock"
+	},
+	"punchTarget":{
+		"title":"Clock Goal",
+		"headRightTxt":"Save",
+		"saveSuccessTxt":"Saved",
+		"saveErrorTxt":"Select another goal",
+		"targetTitle":"Daily Goal",
+		"minuteText":"Min",
+		"targetTip":"Daily content will be included in learning time. Only words/sentences learning will be recorded.",
+		"remindText":"Daily reminder",
+		"remindTip":"Daily reminder requires [Notification Permission]"
+	},
+	"punchTip":{
+		"title":"Clocking",
+		"punchText":"Clocking Reday!",
+		"learnText":"You have learnt",
+		"minuteText":"minutes",
+		"continuousPunch":"Clocked",
+		"dayText":"days",
+		"btnText":"Go clock"
+	}
+}

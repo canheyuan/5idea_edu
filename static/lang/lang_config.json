@@ -1,0 +1,103 @@
+{
+	//打卡页面
+	"punchCard":{
+		"title":"每日打卡",	//title文字
+		"notReachTip":"今日学习时长尚未达标，不能打卡哦，继续学习吧~",	//打卡顶部提示文字
+		"headText":"已连续打卡",	//头部连续打卡文字
+		"dayText":"天",		   //头部连续打卡文字
+		"btnNoReach":"今日学习时长尚未达标",	//未达标按钮文字
+		"btnReach":"立即打卡",	//达标按钮文字
+		"btnFinished":"今日已打卡",	//已打卡按钮文字
+		"btnLearnPlan":"设定学习计划",	//设计学习计划按钮文字
+		
+		"punchMaxDay":"最长连续打卡(天)",	//最长连续打卡文字
+		"emigrateStroe":"闯关最高(分)",	//闯关最高分
+		"learnTime":"学习时长(分钟)",	//学习时长
+		
+		"shareTxt":"分享",	//分享文字
+		"popText01":"累计打开第",	//成功弹窗累计打开文字
+		"popBtn":"我知道了",	//成功弹窗按钮文字
+	},
+	
+	//打卡指引
+	"punchGuide":{
+		"title":"如何打卡",	//title文字
+	},
+	
+	//打卡目标
+	punchTarget:{
+		"title":"打卡目标",	//title文字
+		"headRightTxt":'保存',	//头部右侧文字
+		"saveSuccessTxt":"保存成功",
+		"saveErrorTxt":"未修改打卡目标",
+		"targetTitle":"每日目标",	//每日目标
+		"minuteText":"分钟",	//
+		"targetTip":"每日学习的课程内容（speaking、quiz）将计入学习时长中五行汉语只记录在单词或句子中的学习时间",	//每日目标提示
+		"remindText":"每日提醒",	//每日提醒
+		"remindTip":"需先开启【通知权限】才能打开每日提醒哦",	//每日提醒提示
+	},
+	
+	//打卡提醒
+	"punchTip":{
+		"title":"打卡",	//title
+		"punchText":"可以打卡啦！",	
+		"learnText":"您已学习",
+		"minuteText":"分钟",
+		"continuousPunch":"已连续打卡",
+		"dayText":"天",	
+		"btnText":"去打卡"	//按钮文字
+	},
+	
+	//口语课程分享
+	shareSpoken:{
+		"title":"口语课",	//title
+		"pronounce":"发音",
+		"rhythm":"节奏",
+		"fluency":"流利度",
+		"accuracy":"正确率",
+		"headTypeText":"学习与闯关",
+		"headGetText":"获得了",
+		"challengeBtn" :"我要挑战",
+		"bestTitle":"表现最佳的句子",
+		"recordText01":"我的录音",
+		"recordText02":"原音",
+		"scoreText":"分"
+	},
+	
+	//测试报告分享
+	shareReport:{
+		"title":"测试报告",	//title
+		"headTitle" :"你的朋友在CHIease测试汉语水平取得了Lv.3的好成绩～",
+		"challengeBtn" :"我要挑战",
+	}
+	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0" />
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<title>学习目标</title>
+<link rel="stylesheet" href="static/css/reset.css">
+<link rel="stylesheet" href="static/css/base.css">
+<script src="static/js/conversion.750.js"></script>
+<script src="static/js/zepto.min.js" charset="utf-8"></script>
+<script src="static/js/vue.js" charset="utf-8"></script>
+<script src="static/js/shell.js" charset="utf-8"></script>
+<script>
+Shell.init();
+</script>
+</head>
+
+<body>
+<div id="app" v-cloak>
+	
+</div>
+	
+<div class="detail_mdl">
+	<div class="unit_box">
+		
+		<h2 class="h2_tit">单元字词目标</h2>
+		<div class="unit_ctn">
+			<h3 class="line_tit"><span>第一单元</span></h3>
+			
+			<p><span>1.</span> 爱，我，想，你</p>
+			<p><span>2.</span> 老，爸，有，钱</p>
+			<p><span>3.</span> 现在，点，分，刻</p>
+			<p><span>4.</span> 早饭，午饭，晚饭</p>
+			<p><span>5.</span> 上课，下课，睡觉</p>
+				
+			<h3 class="line_tit"><span>第二单元</span></h3>
+			<p><span>1.</span> 爱，我，想，你</p>
+			<p><span>2.</span> 老，爸，有，钱</p>
+			<p><span>3.</span> 现在，点，分，刻</p>
+			<p><span>4.</span> 早饭，午饭，晚饭</p>
+			<p><span>5.</span> 上课，下课，睡觉</p>
+			
+			<h3 class="line_tit"><span>第三单元</span></h3>
+			<p><span>1.</span> 爱，我，想，你</p>
+			<p><span>2.</span> 老，爸，有，钱</p>
+			<p><span>3.</span> 现在，点，分，刻</p>
+			<p><span>4.</span> 早饭，午饭，晚饭</p>
+			<p><span>5.</span> 上课，下课，睡觉</p>
+		</div>
+		
+	</div>	
+	
+	<div class="unit_box">
+		<h2 class="h2_tit">单元语法目标</h2>
+		<div class="unit_ctn">
+			<h3 class="line_tit"><span>第一单元</span></h3>
+			<p><span>1.</span> 疑问代词“什么”</p>
+			<p><span>2.</span> “是”字句</p>
+			<p><span>3.</span> 结构助词“的”</p>
+			<p><span>4.</span> 疑问代词“谁”</p>
+			<p><span>5.</span> 程度副词“很、非常”</p>
+		</div>
+	</div>	
+	
+</div>
+	
+<script src="static/js/common.js"></script>
+<script>
+	
+//vue实例加载完后执行的函数
+function vmCreated(){
+
+	//设置页面标题栏
+	var param = {
+		name: "punch-tip",
+		title: common.langDatas.punchTip.title,	
+		leftIcon: "back",		//or "close" ，缺省即back
+		backgroundColor: "#00ffffff"	//不设则默认白色
+	}
+	Shell.setPageTitle(JSON.stringify(param));
+	$('title').text(common.langDatas.punchTip.title);
+	
+
+}
+	
+
+$(function(){
+	//获取用户id再执行函数
+	Shell.getSessionId(function(res){
+		common.sessionId = res;
+		common.vueIsLoad && vmCreated();
+	});
+	
+});
+</script>
+</body>
+</html>

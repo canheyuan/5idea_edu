@@ -1,0 +1,12 @@
+1、lang目录里的json文件是语言文件，八国语言分别对应一个文件，文件名为八国语言的简写大写
+
+2、
+common.js：所有的页面都会调用的通用js
+zepto.js：接口数据读取
+vue.js：数据的传输替换（未用到vue路由）；
+shell.js:一些APP封装好的方法调用
+
+3、通用的js的流程
+Shell.init();  =>  common.init();  =>  Shell.getLanguage();  =>  common.langTag();  =>  vueExample();  =>  vmCreated();
+
+shell初始化  => common初始化 =>  获取APP当前语言        =>  获取页面的语言文件  =>  创建vue实例      => vue实例创建完后执行的函数

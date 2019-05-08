@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0" />
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<title>拼音表</title>
+<link rel="stylesheet" href="static/css/base.css">
+<script src="static/js/conversion.750.js" charset="utf-8"></script>
+<script src="static/js/zepto.min.js" charset="utf-8"></script>
+</head>
+<style>
+	.pinyin_mdl{overflow:auto; width:100%; position:relative;}
+	
+	.pinyin_list li{float:left; width:1.5rem; height:.8rem; line-height:.8rem; border:.02rem solid #fff; background:#f3f3f3; color:#242629; text-align: center; font-size:.32rem;}
+	.pinyin_list li.line img{width:100%; height:100%;}
+	.pinyin_ctn {overflow:auto; position:relative; z-index:2;}
+	.pinyin_ctn .pinyin_list li{background:#f3f3f3; }
+	.pinyin_ctn .pinyin_list:nth-child(2n) li{background:#fff; }
+	
+	.pinyin_head{position:fixed; left:1.2rem; top:0;}
+	.pinyin_head .pinyin_list li{background:#ffc10a; color:#555555;}
+	.pinyin_side{float:left; width:1.2rem; position:relative; z-index:3;}
+	.pinyin_side .pinyin_list li{background:#ffc10a; color:#ff5555; width:1.2rem;}
+	.fayin_list li{float:left; width:44%; height:1rem; line-height:1rem; text-align: center; background:#6fa0fa; color:#fff; font-size:.36rem; border-radius:.1rem; margin:0 3% .4rem; }
+	.pinyin_title{font-size:.36rem; padding:.4rem 0 .6rem; text-align: center;}
+</style>
+<body>
+	
+<div class="pinyin_mdl clearfix">
+
+		<div class="pinyin_side" id="pinyin_side">
+			<ul class="pinyin_list clearfix">
+				<li style="position:fixed; top:0rem; left:0;">
+					<img style="width:100%; height:100%;" src="static/images/pinyin_tit.png" alt="">
+				</li>
+				<li></li>
+				<li></li>
+				<li>b</li>
+				<li>p</li>
+				<li>m</li>
+				<li>f</li>
+				<li>d</li>
+				<li>t</li>
+				<li>n</li>
+				<li>l</li>
+				<li>g</li>
+				<li>k</li>
+				<li>h</li>
+				<li>j</li>
+				<li>q</li>
+				<li>x</li>
+				<li>zh</li>
+				<li>ch</li>
+				<li>sh</li>
+				<li>r</li>
+				<li>z</li>
+				<li>c</li>
+				<li>s</li>
+				<li>y</li>
+				<li>w</li>
+			</ul>
+		</div>
+		<div class="pinyin_ctn">
+			<div class="pinyin_head" id="pinyin_head">
+				<ul class="pinyin_list">
+					<li>a</li>
+					<li>o</li>
+					<li>e</li>
+					<li>i</li>
+					<li>u</li>
+					<li>ü</li>
+					<li>ai</li>
+					<li>ei</li>
+					<li>ui</li>
+					<li>ao</li>
+					<li>ou</li>
+					<li>iu</li>
+					<li>ie</li>
+					<li>üe</li>
+					<li>er</li>
+					<li>an</li>
+					<li>en</li>
+					<li>in</li>
+					<li>un</li>
+					<li>ün</li>
+					<li>ang</li>
+					<li>eng</li>
+					<li>ing</li>
+					<li>ong</li>
+				</ul>
+			</div>
+			<div id="pinyin_ctn" style="margin-top:.8rem;">
+
+			</div>
+		</div>
+</div>
+
+<!--拼音弹窗-->
+<div class="mask_bg pop_show" style="display:none;" id="pinyin_pop">
+    <div class="mask_bg_ctn">
+         
+        <div class="pop_mdl animated5 bounceIn">
+			<h3 class="pinyin_title">音频示范</h3>
+			<ul class="fayin_list clearfix">
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+			<span class="close_ico close_btn">×</span>
+		</div>
+		
+        <audio controls="controls" style="display:none;" id="adu"></audio>
+    </div>
+</div>
+	
+<script>
+$(function(){
+	//计算内容宽度
+	var firstW = $('.pinyin_head .pinyin_list li').eq(0).width();
+	var listW = 0;
+	$('#pinyin_head li').each(function(i){
+		listW += $(this).width();
+	});
+	$('.pinyin_head .pinyin_list').width(listW+firstW);
+	$('#pinyin_ctn').width(listW);
+	
+	var pinyinContent = '';
+	$('#pinyin_side li').each(function(i){
+		if(i > 1){
+			var html = `<ul class="pinyin_list clearfix">`;
+			var sideTxt = $(this).text();
+			$('#pinyin_head li').each(function(j){
+				var headTxt = $(this).text();
+				html += "<li>"+ sideTxt + headTxt +"</li>";
+				
+			});
+			html += '</ul>';
+			pinyinContent += html;
+		}
+	});
+	
+	$('#pinyin_ctn').html(pinyinContent);
+	
+	
+	
+	//动态计算头部与左侧的距离
+	var headL = parseInt($('.pinyin_head').css('left'));
+	$('.pinyin_ctn').scroll(function(){
+		var hL = parseInt(headL - $('.pinyin_ctn').scrollLeft());
+		$('.pinyin_head').css('left',hL);
+		//console.log('ctn与左侧的内容：',hL);
+	});
+	
+	//打开弹窗
+	$('#pinyin_ctn').on('click','li',function(){
+		var thisTxt = $(this).text();
+		$('#pinyin_pop .fayin_list li').text(thisTxt);
+		$('#pinyin_pop').show();
+	});
+	
+	//关闭弹窗
+	$('#pinyin_pop .close_btn').on('click',function(){
+		$(this).parents('.mask_bg').hide();
+	});
+	
+	$('#pinyin_pop .fayin_list li').on(function(){
+		
+	});
+	
+	
+	
+});
+</script>
+</body>
+</html>

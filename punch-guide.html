@@ -7,29 +7,29 @@
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
 <meta content="telephone=no" name="format-detection">
 <title>如何打卡</title>
+<link rel="stylesheet" href="static/css/reset.css">
 <link rel="stylesheet" href="static/css/base.css">
 <script src="static/js/conversion.750.js"></script>
 <script src="static/js/zepto.min.js" charset="utf-8"></script>
+<script src="static/js/vue.js" charset="utf-8"></script>
 <script src="static/js/shell.js" charset="utf-8"></script>
 <script>
 Shell.init();
-//设置页面标题栏
-var param = {
-	name: "punch-guide",
-	title: "如何打卡",
-	leftIcon: "back",		//or "close" ，缺省即back
-	backgroundColor: "#ffffff"	//不设则默认白色
-}
-Shell.setPageTitle(JSON.stringify(param));	
 </script>
-
 </head>
-
+	
 <body>
 <style>
 	html,body{background:#f7f7f7;}
 </style>
-<div class="punch_guide">
+<div id="app" v-cloak>
+	<div id="punch_guide" v-html="guideData">
+		{{guideData}}
+	</div>
+</div>
+	
+<!--备份的静态页-->
+<div class="punch_guide" style="display:none;">
 	<h3>打卡指引</h3>
 	<dl class="guide_item" style="padding-top:0;">
 		<dt>1</dt>
@@ -55,7 +55,7 @@ Shell.setPageTitle(JSON.stringify(param));
 	</dl>
 </div>
 	
-<div class="punch_guide">
+<div class="punch_guide" style="display:none;">
 	<h3>打卡须知</h3>
 	<div class="dkxz_txt">
 		<p>1. 学习时长包括：学习过程中听、说句子的时间（暂时只记录单词或句子的学习时间）</p>
@@ -72,8 +72,38 @@ Shell.setPageTitle(JSON.stringify(param));
 //获取用户id再执行函数
 Shell.getSessionId(function(res){
 	common.sessionId = res;
+	common.vueIsLoad && vmCreated();
+});
+	
+//vue实例加载完后执行的函数
+function vmCreated(){
+	//设置页面标题栏
+	var param = {
+		name: "punch-guide",
+		title: common.langDatas.punchGuide.title,	//标题
+		leftIcon: "back",		//or "close" ，缺省即back
+		backgroundColor: "#ffffff"	//不设则默认白色
+	}
+	Shell.setPageTitle(JSON.stringify(param));	
+	$('title').text(common.langDatas.punchGuide.title);
+	common.ajaxFn({
+		url	:	'/api/article/getOneArticleByColumnKey',
+		type:	'post',
+		data:{
+			"app-type":'',	
+			"app-version":'',
+			"device-type":'',	
+			"columnKey":'punch'	//栏目key
+		},
+		success:function(res){
+			console.log('打卡指引：',res);
+			var contentData = res.data.contentMulti[common.currentLang.toLowerCase()];
+			vm.guideData = contentData;
+		}
+	})
+}
 
-});	
+
 </script>
 	
 </body>

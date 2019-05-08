@@ -1,3 +1,4 @@
+一、打卡
 1、打卡：
 https://test.5ideachinese.com/profile/frontend/punch-card.html
 
@@ -10,3 +11,23 @@ https://test.5ideachinese.com/profile/frontend/punch-tip.html
 4、打卡目标：
 https://test.5ideachinese.com/profile/frontend/punch-target.html
 
+二、分享
+1、口语课分享
+https://test.5ideachinese.com/profile/frontend/share-spoken.html?shareid=14ac7340fcbea6d5bd99a7e5dc4c74b1
+
+2、配音课分享
+https://test.5ideachinese.com/profile/frontend/share-dub.html?shareid=91a32adb2e49ed0e9aecda013d8dd315
+
+3、测试报告分享
+https://test.5ideachinese.com/profile/frontend/share-report.html?shareid=4dccdf22cfdbef27fb500ef3e9de2e1f
+
+4、打卡分享页
+https://test.5ideachinese.com/profile/frontend/share-punch.html?shareid=fd086bee70fc4467aab3fce75c8266ad
+
+5、
+https://test.5ideachinese.com/profile/frontend/share-spoken.html
+
+
+三、其他
+1、拼音表
+https://test.5ideachinese.com/profile/frontend/pinyin-table.html

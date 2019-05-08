@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0" />
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<title>如何获取五行币</title>
+<link rel="stylesheet" href="static/css/reset.css">
+<link rel="stylesheet" href="static/css/base.css">
+<script src="static/js/conversion.750.js"></script>
+<script src="static/js/zepto.min.js" charset="utf-8"></script>
+<script src="static/js/vue.js" charset="utf-8"></script>
+<script src="static/js/shell.js" charset="utf-8"></script>
+<script>
+Shell.init();
+</script>
+</head>
+
+<body>
+<div id="app" v-cloak>
+	
+</div>
+	
+<div class="detail_mdl">
+	
+	<h2 class="h2_tit">完成每日打卡</h2>
+	<div class="detail_ctn">
+		<p class="indent2">如获取五行币说的明为纯文字，则用这个页面的样式，如采用图文的形式，则可采用“如何打卡”页面的样式。以下为示范文字，欢迎您使用5Idea Chinese平台，5Idea Chinese平台。</p>
+	</div>
+
+	<h2 class="h2_tit">完成通用课程</h2>
+	<div class="detail_ctn">
+		<p class="indent2">以下为示范文字，为五行汉语所有使用者（但不包括五行汉语聘用管理的员工），包括但不限于该等使用者注册五行汉语用户时的相关个人信息，及与五行汉语共同合作、协作时使用到的个人资料。</p>
+	</div>
+
+	<h2 class="h2_tit">完成每日分享</h2>
+	<div class="detail_ctn">
+		<p class="indent2">以下为示范文字，欢迎您使用5Idea Chinese平台，5Idea Chinese平台（以下简称“五行汉语”）是由五行教育科技有限公司所管理，五行汉语对每一位用户的隐私权采取高度尊重且保护的态度。</p>
+	</div>
+	
+</div>
+	
+<script src="static/js/common.js"></script>
+<script>
+	
+//vue实例加载完后执行的函数
+function vmCreated(){
+
+	//设置页面标题栏
+	var param = {
+		name: "punch-tip",
+		title: common.langDatas.punchTip.title,	
+		leftIcon: "back",		//or "close" ，缺省即back
+		backgroundColor: "#00ffffff"	//不设则默认白色
+	}
+	Shell.setPageTitle(JSON.stringify(param));
+	$('title').text(common.langDatas.punchTip.title);
+	
+
+}
+	
+
+$(function(){
+	//获取用户id再执行函数
+	Shell.getSessionId(function(res){
+		common.sessionId = res;
+		common.vueIsLoad && vmCreated();
+	});
+	
+});
+</script>
+</body>
+</html>

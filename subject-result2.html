@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0" />
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<title>测试结果</title>
+<link rel="stylesheet" href="static/css/reset.css">
+<link rel="stylesheet" href="static/css/subject.css">
+<script src="static/js/conversion.750.js"></script>
+<script src="static/js/zepto.min.js" charset="utf-8"></script>
+<script src="static/js/vue.js" charset="utf-8"></script>
+<script src="static/js/shell.js" charset="utf-8"></script>
+<script>
+Shell.init();
+</script>
+</head>
+
+<body>
+<div id="app" v-cloak>
+	
+</div>
+
+<!--课程练习-过关-->
+<div class="subject_result result_success" style="display:none;">
+	<div class="result_main">
+		<div class="star_list">
+			<span class="act"></span>
+			<span class="act"></span>
+			<span></span>
+		</div>
+		<div class="store">86</div>
+		<h3 class="tit">旗开得胜</h3>
+		<div class="jf_txt">+50 <i class="icons ico_jf"></i></div>
+		<div class="describe_box">
+			<img class="per_img" src="static/images/per_img.jpg" alt="">
+			<div class="name">Anny Lee</div>
+			<div class="des">
+				<img class="yh_img" src="static/images/result_yh01.png" alt="">
+				<span>无敌是最寂寞，超过了90%的用户，太过优秀也是种苦恼啊。</span>
+			</div>
+			<div class="date">2018年9月15号</div>
+		</div>
+	</div>
+	<div class="share_btn">
+		<i class="icons ico_share"></i><span>分享</span>
+	</div>
+</div>
+
+<!--课程练习-不过关-->
+<div class="subject_result result_unsuccess"  style="display: none;">
+	<div class="result_main">
+		<div class="star_list">
+			<span class="act"></span>
+			<span class="act"></span>
+			<span></span>
+		</div>
+		<div class="store">86</div>
+		<h3 class="tit">旗开得胜</h3>
+		<div class="jf_txt">+50 <i class="icons ico_jf"></i></div>
+		<div class="describe_box">
+			<img class="per_img" src="static/images/per_img.jpg" alt="">
+			<div class="name">Anny Lee</div>
+			<div class="des">
+				<img class="yh_img" src="static/images/result_yh02.png" alt="">
+				<span>无敌是最寂寞，超过了90%的用户，太过优秀也是种苦恼啊。</span>
+			</div>
+			<div class="date">2018年9月15号</div>
+		</div>
+	</div>
+	<div class="share_btn">
+		<i class="icons ico_share"></i><span>分享</span>
+	</div>
+</div>
+	
+<!--考试-过关-->
+<div class="subject_result result_success" style="display:none;">
+	<div class="result_main bg02">
+		
+		<div class="store">86</div>
+		<h3 class="tit">考试通过</h3>
+		<h4 class="tit2">exam success</h4>
+		<div class="describe_box">
+			<img class="per_img" src="static/images/per_img.jpg" alt="">
+			<div class="name">Anny Lee</div>
+			<div class="des">
+				<img class="yh_img" src="static/images/result_yh01.png" alt="">
+				<span>无敌是最寂寞，超过了90%的用户，太过优秀也是种苦恼啊。</span>
+			</div>
+			<div class="date">2018年9月15号</div>
+		</div>
+	</div>
+	<a href="javascript:;" class="btm_btn">下一单元</a>
+</div>
+	
+<!--考试-不过关-->
+<div class="subject_result result_unsuccess">
+	<div class="result_main bg02">
+		
+		<div class="store">46</div>
+		<h3 class="tit">考试未通过</h3>
+		<h4 class="tit2">KEEP TRYING</h4>
+		<div class="line_tit"><span>薄弱点</span></div>
+		<div class="score_box">
+			<ul class="score_list clearfix">
+				<li class="yellow"><span>拼音</span></li>
+				<li class="green"><span>词汇</span></li>
+				<li class="blue"><span>语法</span></li>
+				<li class="red"><span>口语</span></li>
+			</ul>
+		</div>
+		<div class="des_txt">
+			无敌是最寂寞，超过了90%的用户，太过优秀也是种苦恼啊。
+		</div>
+	</div>
+	<a href="javascript:;" class="btm_btn">下一单元</a>
+</div>
+	
+
+	
+<script src="static/js/common.js"></script>
+<script>
+	
+//vue实例加载完后执行的函数
+function vmCreated(){
+
+	//设置页面标题栏
+	var param = {
+		name: "punch-tip",
+		title: common.langDatas.punchTip.title,	
+		leftIcon: "back",		//or "close" ，缺省即back
+		backgroundColor: "#00ffffff"	//不设则默认白色
+	}
+	Shell.setPageTitle(JSON.stringify(param));
+	$('title').text(common.langDatas.punchTip.title);
+	
+	punchCheck();
+
+}
+	
+//打卡查询
+function punchCheck(){
+	common.ajaxFn({
+		url:'/api/userPunch/detail',
+		success:(res) => {
+			var checkData = res.data;
+			checkData['studiedTimeMinute'] = parseInt(checkData.studiedTime/60);
+			vm.checkData = checkData;
+		}
+	});
+}	
+
+$(function(){
+	//获取用户id再执行函数
+	Shell.getSessionId(function(res){
+		common.sessionId = res;
+		common.vueIsLoad && vmCreated();
+	});
+	
+});
+</script>
+</body>
+</html>

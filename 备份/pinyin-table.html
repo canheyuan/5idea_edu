@@ -1,0 +1,205 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0" />
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<title>拼音表</title>
+<link rel="stylesheet" href="static/css/base.css">
+<script src="static/js/conversion.750.js" charset="utf-8"></script>
+<script src="static/js/zepto.min.js" charset="utf-8"></script>
+</head>
+<style>
+	.pinyin_mdl{overflow:auto; width:100%; height:100%;  -webkit-overflow-scrolling: touch;}
+	
+	.pinyin_list li{float:left; width:1.5rem; height:.8rem; line-height:.8rem; border:.02rem solid #fff; background:#f3f3f3; color:#242629; text-align: center; font-size:.32rem;}
+	.pinyin_list li img.head{width:1.2rem; height:.8rem; position:fixed; top:0rem; left:0;  border:.02rem solid #fff;}
+	.pinyin_list li.not{color:#999; font-weight:bold;}
+	.pinyin_list li.line img{width:100%; height:100%;}
+	.pinyin_ctn {overflow:auto; position:relative; z-index:2;  }
+	.pinyin_ctn .pinyin_list li{background:#f3f3f3; }
+	.pinyin_ctn .pinyin_list:nth-child(2n) li{background:#fff; }
+	
+	.pinyin_head{position:fixed; left:1.2rem; top:0;}
+	
+	.pinyin_head .pinyin_list li{background:#ffc10a; color:#555555;}
+	.pinyin_side{float:left; width:1.2rem; position:relative; z-index:3;}
+	.pinyin_side .pinyin_list li{background:#ffc10a; color:#ff5555; width:1.2rem;}
+	.fayin_list li{float:left; width:44%; height:1rem; line-height:1rem; text-align: center; background:#6fa0fa; color:#fff; font-size:.36rem; border-radius:.1rem; margin:0 3% .4rem; }
+	.pinyin_title{font-size:.36rem; padding:.4rem 0 .6rem; text-align: center;}
+	.fayin_list li:active{background:#407eef;}
+</style>
+<body>
+<div id="parent" >
+<div class="pinyin_mdl clearfix">
+
+		<div class="pinyin_side" id="pinyin_side">
+			<ul class="pinyin_list clearfix">
+				<li>
+					<img class="head" src="static/images/pinyin_tit.png" alt="">
+				</li>
+				
+			</ul>
+		</div>
+		<div class="pinyin_ctn">
+			<div class="pinyin_head" id="pinyin_head">
+				<ul class="pinyin_list">
+
+				</ul>
+			</div>
+			<div id="pinyin_ctn" style="margin-top:.8rem;">
+
+			</div>
+		</div>
+</div>
+
+<!--拼音弹窗-->
+<div class="mask_bg pop_show" style="display:none;" id="pinyin_pop">
+    <div class="mask_bg_ctn">
+         <div id="aqw"></div>
+        <div class="pop_mdl animated5 bounceIn">
+			<h3 class="pinyin_title">音频示范</h3>
+			<ul class="fayin_list clearfix"></ul>
+			<span class="close_ico close_btn">×</span>
+		</div>
+		
+        <audio controls="controls" style="display:none;" id="audio"></audio>
+    </div>
+</div>
+</div>	
+<script>
+let pinyinData = null;
+$(function(){
+	
+	$.ajax({
+		url:'static/json/pinyin.json',
+		type: 'get',
+		dataType: "json",
+		success:(res)=>{
+			console.log(res);
+			pinyinData = res;
+			var html_head = res.yunmu.map(item=>{return `<li data-val="${item}">${item}</li>`}).join('');
+			var html_side = res.shengmu.map(item=>{return `<li data-val="${item}">${item}</li>`}).join('');
+			
+			
+			$('#pinyin_side ul').append(html_side);
+			$('#pinyin_head ul').append(html_head);
+			
+			//计算内容宽度
+			var firstW = $('.pinyin_head .pinyin_list li').eq(0).width();
+			var listW = 0;
+			$('#pinyin_head li').each(function(i){
+				listW += $(this).width();
+			});
+			$('.pinyin_head .pinyin_list').width(listW+firstW);
+			$('#pinyin_ctn').width(listW);
+
+			var pinyinContent = '';
+			$('#pinyin_side li').each(function(i){
+				var smVal = $(this).text()?$(this).text():'ym';
+				if(i > 0){
+					var html = `<ul class="pinyin_list clearfix">`;
+					$('#pinyin_head li').each(function(j){
+						var ymVal = $(this).text();
+						var ymTxt = $(this).text();
+						if(smVal=='j' || smVal=='q' || smVal=='x'){ 
+							//把ü转成u
+							var ymTxt = (ymTxt.search("ü") != -1 )?ymTxt.replace('ü','u'):ymTxt;
+						}
+						if(!pinyinData.pinyin[smVal][ymVal]){
+							html += `<li class="not">--</li>`;
+						}else{
+							html += `<li shengmu="${smVal}" yunmu="${ymVal}">${(smVal=="ym"?"":smVal)+ymTxt}</li>`;
+						}
+					});
+					html += '</ul>';
+					pinyinContent += html;
+				}
+			});
+
+			$('#pinyin_ctn').html(pinyinContent);
+			
+			var timeaaa = 0;
+			//动态计算头部与左侧的距离
+			var headL = parseInt($('.pinyin_head').css('left'));
+			$('.pinyin_ctn').scroll(function(){
+				
+				var hL = parseInt(headL - $('.pinyin_ctn').scrollLeft());
+				$('.pinyin_head').css('left',hL);
+				var timestamp = (new Date()).getTime();
+				console.log(timestamp-timeaaa)
+				$('#aqw').append(`<p style="color:#fff;">${timestamp-timeaaa}、${$('.pinyin_head').css('left')}</p>`);
+				timeaaa = timestamp;
+				//console.log('ctn与左侧的内容：',hL);
+			});
+			
+		}
+	});
+	
+	
+	//打开弹窗
+	$('#pinyin_ctn').on('click','li',function(){
+		if($(this).hasClass('not')){ return; }
+		var smVal = $(this).attr('shengmu');
+		var ymVal = $(this).attr('yunmu');
+		var pyValArr = pinyinData.pinyin[smVal][ymVal];
+		
+		
+		
+		var html = pyValArr.map((item,i)=>{
+			return `<li audio-url="static/mp3/${item.url}">${item.val}</li>`;
+		}).join('');
+		
+		$('#pinyin_pop .fayin_list').html(html);
+		$('#pinyin_pop').show();
+	});
+	
+	//关闭弹窗
+	$('#pinyin_pop .close_btn').on('click',function(){
+		$(this).parents('.mask_bg').hide();
+	});
+	
+	$('#pinyin_pop').on('click','.fayin_list li',function(){
+		var audio_url = $(this).attr('audio-url');
+		$('#audio').attr('src',audio_url).get(0).play();
+	});
+	
+});
+	
+	//获取音标的所有json文件
+	function aaa(){
+		var resultJson = {};
+		var smData = pinyinData.shengmu;
+		var ymData = pinyinData.yunmu;
+		var ybData = pinyinData.yinbiao;
+		
+		smData.forEach((item,i)=>{
+			resultJson[item] = {};
+			ymData.forEach((item2,j)=>{
+				resultJson[item][item2] = [];
+				if(!ybData[item2]){return;}
+				ybData[item2].forEach((item3,k)=>{
+					var result_ym = (item2.search("ü") != -1 )?item2.replace(item2,'v'):item2;
+					resultJson[item][item2].push({
+						"val":(item+item2).replace(item2,item3),
+						"url":item+result_ym+(k+1)+'.mp3'
+					})
+				});
+			}); 
+		});
+		console.log(resultJson);
+		console.log(JSON.stringify(resultJson));
+	}
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+

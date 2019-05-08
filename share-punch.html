@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0" />
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<title>CHIease - 您的汉语私教</title>
+<link rel="stylesheet" href="static/css/reset.css">
+<link rel="stylesheet" href="static/css/base.css">
+<link rel="stylesheet" href="static/css/share.css">
+<script src="static/js/conversion.750.js"></script>
+<script src="static/js/zepto.min.js" charset="utf-8"></script>
+<script src="static/js/vue.js" charset="utf-8"></script>
+<script src="static/js/shell.js" charset="utf-8"></script>
+<script>
+Shell.init();
+</script>
+</head>
+
+<body class="gray_body">
+<div id="app" v-cloak>
+	
+
+
+<!--顶部提示下载-->
+<div class="share_top clearfix">
+	<div class="logo"><img src="static/images/logo.png" alt=""></div>
+	<a href="javascript:;" class="down_btn">Download</a>
+	<div class="info">
+		<h3>CHIease</h3>
+		<p>懂汉语，你就是下一位封面人物两行样式</p>
+	</div>
+	<span class="close_btn"><i class="icons"></i></span>
+</div>
+	
+<!--打卡分享-->
+<div class="punch_page">
+	<div class="punch_head">
+		<img class="img" src="static/images/dk_top.png" alt="">
+
+		<div class="txt" style="font-size:.34rem; line-height:.6rem; top:.3rem;">你的朋友在CHIease已连续<br>打卡{{checkShareData.lastPunchDay}}{{langData.punchCard.dayText}}</div>
+		<div 
+			class="btn" id="punchBtn" 
+		>我也要打卡</div>
+	</div>
+
+	<ul class="punch_data">
+		<li class="li_date clearfix">
+			<em><i class="icons"></i></em>
+			<span class="num">{{checkShareData.maxPunchDay}}</span>
+			<p>{{langData.punchCard.punchMaxDay}}</p>
+		</li>
+		<li class="li_score clearfix" >
+			<em><i class="icons"></i></em>
+			<span class="num">{{checkShareData.maxChallengeScore}}</span>
+			<p>{{langData.punchCard.emigrateStroe}}</p>
+		</li>
+		<li class="li_time clearfix">
+			<em><i class="icons"></i></em>
+			<span class="num">{{checkShareData.studyDuration}}</span>
+			<p>{{langData.punchCard.learnTime}}</p>
+		</li>
+	</ul>
+</div>
+	
+
+<!--下载-->
+<div class="download_mdl">
+	<div class="down_head">
+		<div class="title">
+			<h3>CHIease | 听说读写</h3>
+			<p>以点起步，以线过渡，以面全面巩固</p>
+		</div>
+		<img class="head_img" src="static/images/share_img01.jpg" alt="">
+	</div>
+	<div class="down_btns">
+		<a class="apply_btn" href="javascript:;">
+			<i class="icons ico_apply"></i>
+			<h4>Download</h4>
+			<p>on the App Store</p>
+		</a>
+		<a class="android_btn" href="javascript:;">
+			<i class="icons ico_android"></i>
+			<h4>Download</h4>
+			<p>on the Google Play</p>
+		</a>
+	</div>
+</div>
+
+</div>	
+	
+<script src="static/js/common.js"></script>
+<script>
+	
+//vue实例加载完后执行的函数
+function vmCreated(){
+
+	//设置页面标题栏
+	var param = {
+		name: "punch-tip",
+		title: common.langDatas.punchTip.title,	
+		leftIcon: "back",		//or "close" ，缺省即back
+		backgroundColor: "#00ffffff"	//不设则默认白色
+	}
+	Shell.setPageTitle(JSON.stringify(param));
+	$('title').text(common.langDatas.punchTip.title);
+	
+	common.ajaxFn({
+		url:`/api/shareInfo/userPunchShareInfo/${common.shareId}`,
+		success:(res)=>{
+			var datas =  res.data;
+			vm.checkShareData = datas;
+			
+		}
+	});
+
+}
+	
+//打卡查询
+function punchCheck(){
+	common.ajaxFn({
+		url:'/api/userPunch/detail',
+		success:(res) => {
+			var checkData = res.data;
+			checkData['studiedTimeMinute'] = parseInt(checkData.studiedTime/60);
+			vm.checkData = checkData;
+		}
+	});
+}	
+
+$(function(){
+	//获取用户id再执行函数
+	Shell.getSessionId(function(res){
+		common.sessionId = res;
+		common.vueIsLoad && vmCreated();
+	});
+	
+});
+</script>
+</body>
+</html>

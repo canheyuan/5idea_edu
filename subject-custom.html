@@ -1,0 +1,300 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0" />
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<title>测试题目</title>
+<link rel="stylesheet" href="static/css/reset.css">
+<link rel="stylesheet" href="static/css/subject.css">
+<script src="static/js/conversion.750.js"></script>
+<script src="static/js/zepto.min.js" charset="utf-8"></script>
+<script src="static/js/vue.js" charset="utf-8"></script>
+<script src="static/js/shell.js" charset="utf-8"></script>
+</head>
+
+<body class="subject_bg">
+<div id="app" v-cloak>
+	
+	<!--测试题开始弹窗-->
+	<div class="mask_bg" v-show="startPop">
+		<div class="mask_bg_ctn">
+			<div class="start_pop">
+				<img class="top_img" src="static/images/start_bg.png" alt="">
+				<h3>Chinese Proficiency Test</h3>
+				<p>ccurate Testing, Exact Point<br>
+				Listening Speaking Reading Vocabulary<br>
+				Grammar<br>
+				Catch all in one draft<br>
+				Make smooth learning<br>
+				Here you are, professional test!<br>
+				Here you go, scientific teaching!</p>
+				<a href="javascript:;" @click="startSubject">Start Test</a>
+			</div>
+		</div>
+	</div>
+	
+	<!--测试题暂停弹窗-->
+	<div class="mask_bg" v-show="!examStatus && isPauseSubject">
+		<div class="mask_bg_ctn">
+			<div class="subject_mask_btn">
+				<a href="javascript:;" @click="pauseSubject">继续答题</a>
+<!--				<a href="javascript:;">重新开始</a>-->
+				<a href="javascript:;">退出</a>
+			</div>
+		</div>
+	</div>
+	
+	<!--测试题头部-->
+	<div class="subject_head" v-if="subjectItem">
+		<div class="progress" id="progress" :style="{width:(subjectIndex+1)/5*100+'%'}"></div>
+		<div class="play_btn" @click="pauseSubject">
+			<i class="icons ico_pause"></i>
+			<div class="cirqueBox">
+				<div class="cirqueYellow"></div>
+				<div :class="{'cirqueGrey':subjectIsShow,'play':examStatus}" id="cirqueBox"></div>
+			</div>
+		</div>
+		<div class="right_txt">
+			<i class="icons ico_tip"></i>
+			<span>提示</span>
+		</div>
+		<div class="txt_jf">
+			<span class="">{{subjectIndex+1}}</span>/5
+		</div>
+	</div>
+	<div 
+		:class="{'subject_mdl':true, 'show':subjectIsShow}" 
+		v-if="subjectItem"
+	>
+		<!--1、听音选图-->
+		<div class="subject_item" v-if="subjectItem.questionType==1">
+			<ul class="tyxt_list">
+				<li 
+					v-for="(item,index) in subjectItem.options" 
+					:class="{'act':item.isChecked}" 
+					@click="subjectChoiceFn(index)"
+				>
+					<img :src="item.img" alt="">
+					<div class="mask"><i class="ico_gou"></i></div>
+				</li>
+			</ul>
+			<div class="tyxt_answer">{{subjectItem.title}}</div>
+			<div class="audio_btn audio_btm" @click="subjectPlayAudio(subjectItem.audio)">
+				<img src="static/images/ico_audio.png" alt="">
+			</div>
+		</div>
+
+		<!--4、选择填空-->
+		<div class="subject_item"  v-if="subjectItem.questionType==4">
+			<div class="tyxz_img"><img :src="subjectItem.img" alt=""></div>
+			<div class="tyxt_answer">{{subjectItem.content}}</div>
+			<div class="audio_btn audio_center" @click="subjectPlayAudio(subjectItem.audio)">
+				<img src="static/images/ico_audio.png" alt="">
+			</div>
+			<ul class="answer_btn01">
+				<li 
+					v-for="(item,index) in subjectItem.options"
+					@click="subjectChoiceFn(index)" 
+					:class="{'df':!item.isPlayAudio,'act':item.isChecked}"
+				><span>{{item.content}}</span></li>
+			</ul>
+		</div>
+
+		<!--5、完形填空题-->
+		<div 
+			:class="{'subject_item':true,'subject_act':(subjectItem.contentNum>=subjectItem.contentArr.length-1)}"  
+			v-if="subjectItem.questionType==5"
+		>
+			<div class="tyxz_img"><img :src="subjectItem.img" alt=""></div>
+			<div class="tyxz_text">
+				<p v-for="(item,index) in subjectItem.contentArr">
+					{{item.val}}
+					<span 
+						@click="removeAnswer(index)" 
+						v-if='index!=subjectItem.contentArr.length-1'
+					>
+						{{(item.answerIndex==='')?'':subjectItem.options[item.answerIndex].content}}
+					</span>
+				</p>
+			</div>
+<!--				<div class="tyxz_text" v-html="subjectItem.content">{{subjectItem.content}}</div>-->
+
+			<div 
+				class="audio_btn audio_center" 
+				@click="subjectPlayAudio(subjectItem.audio,subjectIndex)"
+			>
+				<img src="static/images/ico_audio.png" alt="">
+			</div>
+			<ul class="answer_btn02 answer_btm">
+				<li 
+					v-for="(item,index) in subjectItem.options"
+					@click="subjectChoiceFn(index)" 
+					:class="{'act':item.isChecked}"
+				>{{item.content}}</li>
+			</ul>
+			<div 
+				 class="submit_btn"
+				 @click="affirmAnswer()"
+			>Submit</div>
+		</div>
+
+		<!--6、听音选音-->
+		<div class="subject_item" v-if="subjectItem.questionType==6">
+			<div class="tyxz_img"><img :src="subjectItem.img" alt=""></div>
+			<div 
+				 class="audio_btn audio_center" 
+				 @click="subjectPlayAudio(subjectItem.audioList,subjectIndex)"
+			>
+				<img src="static/images/ico_audio.png" alt="">
+			</div>
+			<ul class="answer_btn03">
+				<li 
+					v-for="(item,index) in subjectItem.options"
+					@click="subjectChoiceFn(index)" 
+					:class="{'df':!item.isPlayAudio,'act':item.isChecked}"
+				><span>{{item.optionCode}}</span></li>
+			</ul>
+		</div>
+
+		<!--7、选择排序-->
+		<div 
+			:class="{'subject_item':true,'subject_act':(subjectItem.answerArr.length==subjectItem.options.length)}" 
+			v-if="subjectItem.questionType==7"
+		>
+			<div class="tyxz_img"><img :src="subjectItem.img" alt=""></div>
+			<div 
+				 class="audio_btn audio_center" 
+				 @click="subjectPlayAudio(subjectItem.audio,subjectIndex)"
+			>
+				<img src="static/images/ico_audio.png" alt="">
+			</div>
+			<ul class="answer_btn02" style="position:static;">
+				<li 
+					v-for="(item,index) in subjectItem.answerArr"
+					@click="removeAnswer(index)" 
+				>{{subjectItem.options[item].content}}</li>
+			</ul>
+
+			<ul class="answer_btn02 answer_btm">
+				<li 
+					v-for="(item,index) in subjectItem.options"
+					@click="subjectChoiceFn(index)" 
+					:class="{'act':item.isChecked}"
+				>{{item.content}}</li>
+			</ul>
+			<div 
+				class="submit_btn"
+				@click="affirmAnswer()"
+			>Submit</div>
+		</div>
+		
+		
+	</div>
+	
+	<audio :src="currentAudioUrl" id="subjectPlayAudio"></audio>
+	
+</div>
+
+
+	
+<!--判断题-->
+<div class="subject_mdl" style="padding-top:2.5rem; display:none;">
+	<div class="tyxz_img"><img src="static/images/temp/tyxt_img01.jpg" alt=""></div>
+	<div class="audio_btn audio_center"><img src="static/images/ico_audio.png" alt=""></div>
+	<ul class="answer_btn01">
+		<li class="act"><span>是的<i class="icons ico_gou"></i></span></li>
+		<li><span>不是<i class="icons ico_gou"></i></span></li>
+	</ul>
+</div>
+<script src="static/js/common.js"></script>
+<script>
+
+//vue实例加载完后执行的函数
+function vmCreated(){
+	
+	getSubjectFn();
+
+}
+
+	
+//加载题目数据,题目类型：1 听音选图、2 看图跟读、3 看图选择、4 选择填空、5 完形填空、6 听音选音、7 选择排序
+function getSubjectFn(){
+	common.ajaxFn({
+		url:'/api/question/random-list',
+		data:{
+			levelCount:'{1:5,2:5,3:5}',
+			types:'[1,4,5,6,7]'
+		},
+		success:(res) => {
+			console.log('测试题目：',res);
+			var subjectData = res;
+			subjectData.currentAudioUrl = '';
+			subjectData.currentIndex = 0;
+			subjectData.level1  = [];
+			subjectData.level2 = [];
+			subjectData.level3 = [];
+			subjectData.data.forEach(item =>{
+				
+				//类型5表示完型填空题
+				if(item.questionType == 5){
+					//替换题目中的横线
+					item.contentArr = item.content.split('____').map(item2=>{
+						return {val:item2,answerIndex:''}
+					});
+					item.contentNum = 0;	//记录当前题目中有几个答案了
+				}
+				
+				//听音选音
+				var audioList = item.audio;
+				if(item.questionType == 6){
+				   //听音选音,把题目和答案声音的链接通过逗号连在一起
+					item.options.forEach(item2=>{
+						if(item2.audio){
+						   	item.isPlayAudio = false;
+							audioList += ',' + item2.audio;
+						}
+					})
+				}
+				item.audioList = audioList;
+				
+				//选择排序
+				if(item.questionType == 7){
+				   	item.answerArr = [];
+					item.contentNum = 0;	//记录当前题目中有几个答案了
+				}
+				
+				switch(item.level){
+					case 1:
+						subjectData.level1.push(item);
+						break;
+					case 2:
+						subjectData.level2.push(item);
+						break;
+					case 3:
+						subjectData.level3.push(item);
+						break;
+				}
+				
+			});
+			console.log('level1:',subjectData.level1);
+			console.log('level2:',subjectData.level2);
+			console.log('level3:',subjectData.level3);
+			vm.subjectData = subjectData;
+			
+		}
+	});
+}	
+
+$(function(){
+	//获取用户id再执行函数
+//	Shell.getSessionId(function(res){
+//		common.sessionId = res;
+//		common.vueIsLoad && vmCreated();
+//	});
+});
+</script>
+</body>
+</html>
