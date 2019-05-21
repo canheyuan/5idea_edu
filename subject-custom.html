@@ -54,7 +54,10 @@
 			<i class="icons ico_pause"></i>
 			<div class="cirqueBox">
 				<div class="cirqueYellow"></div>
-				<div :class="{'cirqueGrey':subjectIsShow,'play':examStatus}" id="cirqueBox"></div>
+				<div 
+					:class="{'cirqueGrey':subjectIsShow,'play':examStatus}" 
+					id="cirqueBox" 
+				></div>
 			</div>
 		</div>
 		<div class="right_txt">
@@ -226,7 +229,8 @@ function getSubjectFn(){
 		url:'/api/question/random-list',
 		data:{
 			levelCount:'{1:5,2:5,3:5}',
-			types:'[1,4,5,6,7]'
+			//types:'[1,4,5,6,7]'
+			types:'[6,7]',
 		},
 		success:(res) => {
 			console.log('测试题目：',res);

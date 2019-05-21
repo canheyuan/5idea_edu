@@ -214,7 +214,10 @@ let common = {
 				subjectItem:{},	//当前测试题数据
 				subjectIndex:0,	//当前测试题索引
 				subjectStore:3,	//当前级别分数
+				currentAudioList:[],	//当前播放音频列表
+				currentaudioIndex:0,	//前播放音频的所有
 				currentAudioUrl:'',	//当前的音频地址
+				
 				
 			},
 			methods:{
@@ -310,6 +313,39 @@ let common = {
 						vm.examStatus = false;
 						console.log('监听css动画重新开始');
 					});
+					
+					//监听播放结束事件
+					var subjectAudioObj = $('#subjectPlayAudio').get(0);
+					subjectAudioObj.addEventListener("ended",function(){
+						vm.isPlayStatus = false;
+						var audioIndex = vm.currentaudioIndex;
+						var audioList = vm.currentAudioList;
+						if(audioList.length==1){
+							vm.examStatus = true;
+							clearInterval(countTimer);
+							vm.remainingTime = 10;
+							_this.countTime();
+							return;
+						};
+						audioIndex++;
+						vm.currentaudioIndex = audioIndex;
+						if(audioIndex < audioList.length){ 
+							vm.subjectItem.options[audioIndex-1].isPlayAudio = true;
+						   	vm.currentAudioUrl = audioList[audioIndex];
+							var timer = setInterval(()=>{
+								if(!vm.isPauseSubject){
+									clearInterval(timer);
+									subjectAudioObj.play();  
+								}
+							},1000);
+						}else{
+							clearInterval(countTimer);
+							vm.currentaudioIndex = 0;
+							vm.examStatus = true;
+							vm.remainingTime = 10;
+							_this.countTime();
+						}
+					},false);
 				},
 				
 				//暂停/开始做题(是否播放)
@@ -317,12 +353,12 @@ let common = {
 					var _this = this;
 					var subjectAudioObj = $('#subjectPlayAudio').get(0);
 					if(vm.isPauseSubject){
-						if(vm.isPlayStatus){
-							subjectAudioObj.play();
-						}
 						vm.examStatus = true;
 						vm.isPauseSubject = false;
-						_this.countTime();
+						if(vm.isPlayStatus){
+							subjectAudioObj.play();
+							_this.countTime();
+						}
 					}else{
 						clearInterval(countTimer);
 						subjectAudioObj.pause();
@@ -347,38 +383,16 @@ let common = {
 				subjectPlayAudio(audioUrl){
 					var _this = this;
 					var subjectAudioObj = $('#subjectPlayAudio').get(0);
-					var audioIndex = 0;
 					var audioList = audioUrl.split(',');
+					vm.currentAudioList = audioList;
 					vm.currentAudioUrl = audioList[0];
 					setTimeout(()=>{
-						subjectAudioObj.play();
-						vm.isPlayStatus = true;
+						if(!vm.isPauseSubject){
+							subjectAudioObj.play();
+							vm.isPlayStatus = true;   
+						 }
 					},100);
 					
-					//监听播放结束事件
-					subjectAudioObj.addEventListener("ended",function(){
-						vm.isPlayStatus = false;
-						if(audioList.length==1){
-							vm.examStatus = true;
-							clearInterval(countTimer);
-							vm.remainingTime = 10;
-							_this.countTime();
-							return;
-						};
-						audioIndex++;
-						if(audioIndex < audioList.length){ 
-							vm.subjectItem.options[audioIndex-1].isPlayAudio = true;
-						   	vm.currentAudioUrl = audioList[audioIndex];
-							setTimeout(()=>{
-								subjectAudioObj.play();
-							},1000);
-						}else{
-							vm.examStatus = true;
-							clearInterval(countTimer);
-							vm.remainingTime = 10;
-							_this.countTime();
-						}
-					},false);
 				},
 				
 				//选择答案(点击选项的索引)
@@ -422,7 +436,7 @@ let common = {
 				
 				//判断答案是否正确
 				affirmAnswer(a1,a2,callback){
-					
+					var subjectAudioObj = $('#subjectPlayAudio').get(0);
 					var subjectStore = vm.subjectStore;
 					if(a1 == a2){
 						subjectStore = subjectStore + 0.4;
@@ -430,9 +444,11 @@ let common = {
 						subjectStore = subjectStore - 0.7;
 					}
 					vm.subjectStore = subjectStore;
-					vm.submitStatus = true;
+					subjectAudioObj.pause();
 					clearInterval(countTimer);
+					vm.submitStatus = true;
 					vm.examStatus = false;
+					vm.currentaudioIndex = 0;
 					this.skipNextSubject();
 				},
 				
