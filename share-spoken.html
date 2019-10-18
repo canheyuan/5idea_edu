@@ -6,30 +6,34 @@
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
 <meta content="telephone=no" name="format-detection">
-<title>CHIease - 您的汉语私教</title>
+<title></title>
 <link rel="stylesheet" href="static/css/reset.css">
 <link rel="stylesheet" href="static/css/share.css">
 <script src="static/js/conversion.750.js"></script>
 <script src="static/js/zepto.min.js" charset="utf-8"></script>
 <script src="static/js/vue.js" charset="utf-8"></script>
+<!--
 <script src="static/js/shell.js" charset="utf-8"></script>
 <script>
 Shell.init();
 </script>
+-->
 </head>
 
 <body class="gray_body">
 <div id="app" v-cloak>
 	
 <!--顶部提示下载-->
-<div class="share_top clearfix">
+<div :class="['share_top','clearfix',{download_show:downloadIsShow}]">
 	<div class="logo"><img src="static/images/logo.png" alt=""></div>
-	<a href="javascript:;" class="down_btn">Download</a>
+	<a :href="isIos?langData.shareData.downloadAppleUrl:'#download_mdl'" class="down_btn">
+		{{langData.shareData.topBtn}}
+	</a>
 	<div class="info">
-		<h3>CHIease</h3>
-		<p>懂汉语，你就是下一位封面人物两行样式</p>
+		<h3>{{langData.shareData.topTitle}}</h3>
+		<p>{{checkShareData.shareTitle}}</p>
 	</div>
-	<span class="close_btn"><i class="icons"></i></span>
+	<span class="close_btn" @click="closeDownloadFn"><i class="icons"></i></span>
 </div>
 	
 <!--口语课头部-->
@@ -39,26 +43,30 @@ Shell.init();
 			<h3>{{checkShareData.chapterName.zh}}</h3>
 			<p>{{checkShareData.chapterName.en?checkShareData.chapterName.en:'--'}}</p>
 		</div>
-		
-		<div class="spoken_charts" id="spoken_charts">
-			
-		</div>
+		<!--图表-->
+		<div class="spoken_charts" id="spoken_charts"></div>
 		
 		<div class="shadow_bg"></div>
 	</div>
 	<div class="share_user">
 		<div class="per_img"><img :src="checkShareData.headImg" alt=""></div>
-		<a href="javascript:;" class="btn">我要挑战</a>
+		<a :href="isIos?langData.shareData.downloadAppleUrl:'#download_mdl'"  class="btn">
+			{{langData.shareData.challengeBtn}}
+		</a>
 		<div class="info">
-			<h3>学习与闯关</h3>
-			<p>获得了<span class="yellow">10</span><i class="icons ico_money"></i></p>
+			<h3>{{langData.shareSpoken.headTypeText}}</h3>
+			<p>
+				{{langData.shareSpoken.headGetText}}
+				<span class="yellow">10</span>
+				<i class="icons ico_money"></i>
+			</p>
 		</div>
 	</div>
 </div>
 
 <!--录音列表-->
 <div class="share_record">
-	<div class="record_title"><i class="icons ico_zan"></i>表现最佳的句子</div>
+	<div class="record_title"><i class="icons ico_zan"></i>{{langData.shareData.bestTitle}}</div>
 	<div class="record_list">
 		
 		<div class="record_item" v-for="(item,index) in checkShareData.paraList">
@@ -70,7 +78,9 @@ Shell.init();
 						<div class="mask"></div>
 						<i :class="item.isUserPlay?'icons ico_stop':'icons ico_play'"></i>
 					</div>
-					<div class="text">我的录音 - <span class="orange">{{item.score}}分</span></div>
+					<div class="text">
+						{{langData.shareData.recordText01}} - <span class="orange">{{item.score}}{{langData.shareData.scoreText}}</span>
+					</div>
 					
 				</li>
 				<li>
@@ -78,88 +88,82 @@ Shell.init();
 						<i :class="item.isParaPlay?'icons ico_stop':'icons ico_play'"></i>
 						<div class="progress"></div>
 					</div>
-					<div class="text">原音</div>
+					<div class="text">{{langData.shareData.recordText02}}</div>
 				</li>
 			</ul>
 		</div>
+		
 		<audio id="spokenAudio" class="audio" :src="shareMediaUrl"></audio>
-<!--
-		<div class="record_item">
-			<h4 class="tit"><span class="blue">如果我了解更多中国的文化</span>就好了，<span class="blue">我想看《金瓶梅》</span>没文化会看不懂的，嚎~</h4>
-			<ul class="audio_list">
-				<li>
-					<div class="play_box">
-						<img src="static/images/per_img.jpg" alt="">
-						<div class="mask"></div>
-						<i class="icons ico_play"></i>
-					</div>
-					<div class="text">我的录音 - <span class="orange">90分</span></div>
-				</li>
-				<li>
-					<div class="play_box">
-						<i class="icons ico_play"></i>
-						<div class="progress"></div>
-					</div>
-					<div class="text">原音</div>
-				</li>
-			</ul>
-		</div>
--->
 		
 	</div>
 </div>
 
 <!--下载-->
-<div class="download_mdl">
+<div class="download_mdl" id="download_mdl">
 	<div class="down_head">
 		<div class="title">
-			<h3>CHIease | 听说读写</h3>
-			<p>以点起步，以线过渡，以面全面巩固</p>
+			<h3>{{langData.shareData.headTitle}}</h3>
+			<p>{{checkShareData.shareDesc}}</p>
 		</div>
 		<img class="head_img" src="static/images/share_img01.jpg" alt="">
+		<img class="down_tit" src="static/images/down_head.png" alt="" >
 	</div>
-	<div class="down_btns">
-		<a class="apply_btn" href="javascript:;">
-			<i class="icons ico_apply"></i>
+	<div class="down_btns"  v-if="isAndroid || isPc">
+		<a :href="langData.shareData.downloadAppleUrl" v-if="isPc">
+			<img src="static/images/downbtn01.png" alt="">
+		</a>
+		<a :href="langData.shareData.downloadGPUrl">
+			<img src="static/images/downbtn02.png" alt="">
+		</a>
+		<a :href="langData.shareData.downloadMyappUrl">
+			<img src="static/images/downbtn03.png" alt="">
+		</a>
+	</div>
+	<div class="down_btns2" v-if="isIos">
+		<a class="apply_btn" :href="langData.shareData.downloadAppleUrl">
+			<i class="icons"></i>
 			<h4>Download</h4>
 			<p>on the App Store</p>
 		</a>
-		<a class="android_btn" href="javascript:;">
-			<i class="icons ico_android"></i>
-			<h4>Download</h4>
-			<p>on the Google Play</p>
-		</a>
 	</div>
 </div>
-	
+
 </div>
-<script src="static/js/echarts.min.js"></script>
-<script src="static/js/echarts-gl.min.js"></script>
+<script src="static/js/echarts.min.js"></script><!--echart图表插件-->
+<script src="static/js/echarts-gl.min.js"></script><!--echart扩展图表插件-->
 <script src="static/js/common.js"></script>
 <script>
 //vue实例加载完后执行的函数
 function vmCreated(){
-
 	//设置页面标题栏
-	var param = {
-		name: "share-spoken",
-		title: '口语课分享',	
-		leftIcon: "back",		//or "close" ，缺省即back
-		backgroundColor: "#00ffffff"	//不设则默认白色
-	}
-	Shell.setPageTitle(JSON.stringify(param));
-	$('title').text('口语课分享');
+//	var param = {
+//		name: "share-spoken",
+//		title: common.langDatas.shareSpoken.title,	
+//		leftIcon: "back",		//or "close" ，缺省即back
+//		backgroundColor: "#00ffffff"	//不设则默认白色
+//	}
+//	Shell.setPageTitle(JSON.stringify(param));
+	$('title').text(common.langDatas.shareSpoken.title);
 	
 	common.ajaxFn({
 		url:`/api/shareInfo/oralChaShareInfo/${common.shareId}`,
 		success:(res)=>{
 			var datas =  res.data;
-			datas.paraList.forEach(item=>{
-				item.isUserPlay = false;
-				item.isParaPlay = false;
-			});
+			
+			//根绝接口传入的语言加载语言包
+			if(datas.lan != common.currentLang && datas.lan){
+			   	common.langTag(datas.lan,function(result){
+					vm.langData = result;
+				});
+			}
+			
+			if(datas.paraList){
+				datas.paraList.forEach(item=>{
+					item.isUserPlay = false;
+					item.isParaPlay = false;
+				});
+			}
 			vm.checkShareData = datas;
-			console.log('checkShareData:',datas);
 			chartsFn();	
 		}
 	});
@@ -173,8 +177,6 @@ function vmCreated(){
 			item.isParaPlay = false;
 		});
 	},false);
-
-
 }	
 
 function chartsFn(){
@@ -182,6 +184,9 @@ function chartsFn(){
 	var barWidth = 40*chartsHeight/350;
 	var barInterval =16*chartsHeight/350;
 	var color= ['#ff5555', '#35afff','#5fce51', '#ffc10a'];
+	
+	var shareSpokenData = common.langDatas.shareSpoken;
+	
 	var dataStyle = {
 		normal: {
 			label: {
@@ -238,7 +243,7 @@ function chartsFn(){
 			itemWidth:35*chartsHeight/350,
 			itemHeight:35*chartsHeight/350,
 			itemGap:20,
-			 data: ['正确率', '流畅度', '完整度','发音'],
+			 data: [shareSpokenData.accuracy, shareSpokenData.fluency, shareSpokenData.intact,shareSpokenData.pronounce],
 			textStyle: {
 				color: '#ffffff'
 			}
@@ -258,7 +263,7 @@ function chartsFn(){
 				data: [
 					{
 						value: vm.checkShareData.accuracyScore,
-						name: '正确率',
+						name: shareSpokenData.accuracy,
 						itemStyle: {
 							normal: {
 								color: color[0]
@@ -289,7 +294,7 @@ function chartsFn(){
 				},
 				data: [{
 						value: vm.checkShareData.fluencyScore,
-						name: '流畅度',
+						name: shareSpokenData.fluency,
 						itemStyle: {
 							normal: {
 								color:color[1]
@@ -317,7 +322,7 @@ function chartsFn(){
 				startAngle: 90,
 				data: [{
 						value: vm.checkShareData.integrityScore,
-						name: '完整度',
+						name: shareSpokenData.intact,
 						itemStyle: {
 							normal: {
 								color: color[2]
@@ -345,7 +350,7 @@ function chartsFn(){
 				startAngle: 90,
 				data: [{
 						value: vm.checkShareData.rhythmScore,
-						name: '发音',
+						name: shareSpokenData.pronounce,
 						itemStyle: {
 							normal: {
 								color: color[3]
@@ -372,10 +377,10 @@ function chartsFn(){
 
 $(function(){
 	//获取用户id再执行函数
-	Shell.getSessionId(function(res){
-		common.sessionId = res;
-		common.vueIsLoad && vmCreated();
-	});
+//	Shell.getSessionId(function(res){
+//		common.sessionId = res;
+//		common.vueIsLoad && vmCreated();
+//	});
 	
 });
 </script>

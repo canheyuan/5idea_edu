@@ -1,3 +1,4 @@
+// 更新日期：2019-06-25
 
 let vm = null;	//vue实例
 var countTimer = null;	//测试题-计算做题定时器
@@ -8,11 +9,39 @@ let common = {
 		 var r = window.location.search.substr(1).match(reg);
 		 if(r!=null)return decodeURIComponent(r[2]); return null;
 	},
+	//判断手机系统
+	isSystem:()=>{
+		var u = navigator.userAgent;
+		var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+    	var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+		var resultTxt = '';
+		if(isAndroid){
+			resultTxt = 'android';
+		}else if(isiOS){
+			resultTxt = 'ios';
+		}
+		return resultTxt;
+	},
+	//时间戳转时间
+	getDate(timestamp) {
+	  //shijianchuo是整数，否则要parseInt转换 
+	  var time = new Date(timestamp);
+	  var y = time.getFullYear();
+	  var m = time.getMonth() + 1;
+	  var d = time.getDate();
+	  var h = time.getHours();
+	  var mm = time.getMinutes();
+	  var s = time.getSeconds();
+	  return y + '-' + common.add0(m) + '-' + common.add0(d) + ' ' + common.add0(h) + ':' + common.add0(mm) + ':' + common.add0(s);
+	},
+	add0(m){ return m < 10 ? '0' + m : m },
+	
 	isTest:false,	//是否测试环境
 	shareId : null,	//记录是否是分享页面，是的话就不用获取sessionid
-	//apiUrl : location.protocol+'//'+location.host,	//接口前缀
+	apiUrl : location.protocol+'//'+location.host,	//接口前缀
+	apiTestUrl : 'https://test.5ideachinese.com',	//接口前缀
 	//apiTestUrl : 'http://192.168.0.244:8090',	//接口前缀
-	apiUrl : 'http://192.168.0.244:8090',	//接口前缀
+	//apiUrl : 'http://192.168.0.244:8090',	//接口前缀
 	sessionId : '',	//用户id
 	currentLang : '',	//当前语言
 	langDatas : null,	//当前语言的json文件
@@ -122,7 +151,7 @@ let common = {
 	
 	//获取语言
 	langTag : (lang,callback) => {
-		var lang = lang.toUpperCase();
+		var lang = lang.toLowerCase();
 		$.ajax({
 			url : `static/lang/${lang}.json`,
 			type: 'get',
@@ -137,9 +166,10 @@ let common = {
 					return;
 				}
 				common.langDatas = res;
-				callback && callback();
+				callback && callback(res);
 			},
 			error:()=>{
+				console.log('失败');
 				//若无加载到语言文件，就加载英文
 				common.currentLang = 'en';
 				common.langTag('en',function(){
@@ -173,6 +203,9 @@ let common = {
 		vm = new Vue({
 			el: '#app',
 			data: {
+				"isIos" : common.isSystem()=='ios',	//是否是苹果系统
+				"isAndroid" : common.isSystem()=='android',	//是否是安卓系统
+				"isPc":common.isSystem()=='',	//是否是Pc
 				"langData":common.langDatas,	//语言json数据
 				"currentLang":common.currentLang,
 				
@@ -191,6 +224,7 @@ let common = {
 				targetTimeIndex:0,	//当前的打卡目标索引
 				
 				/*---------------- 分享_S ---------------*/
+				"downloadIsShow":true,
 				//查询口语课分享信息
 				"checkSpoken":{
 					"chapterName" : {}
@@ -200,7 +234,7 @@ let common = {
 				"checkShareData":{
 					"chapterName" : {}
 				},
-				reportData:[],
+				reportData:[],	//测试报告 结果列表
 				
 				/*---------------- 测试题_S ---------------*/
 				startPop:true,	//开始弹窗是否显示
@@ -209,15 +243,19 @@ let common = {
 				isPauseSubject:false,	//是否点击暂停做题
 				examStatus:false,	//判断是否在做题状态
 				isPlayStatus:false,	//是否在播放状态
-				remainingTime:10,	//做题剩余时间
+				remainingTime:10000,	//做题剩余时间
 				subjectData:{},	//测试题数据
 				subjectItem:{},	//当前测试题数据
 				subjectIndex:0,	//当前测试题索引
 				subjectStore:3,	//当前级别分数
 				currentAudioList:[],	//当前播放音频列表
-				currentaudioIndex:0,	//前播放音频的所有
+				currentaudioIndex:0,	//当前播放音频的索引
 				currentAudioUrl:'',	//当前的音频地址
-				
+				isFirstPlay:true,	//题目是否第一次播放
+				choiceAnswer:'',
+				resultData:{},		//测试题结果页数据
+				downloadPopShow:false,	//测试题结果页下载弹窗
+				tjData:{},		//统计字段
 				
 			},
 			methods:{
@@ -248,11 +286,25 @@ let common = {
 				/*---------------- 打卡模块_End ---------------*/
 				
 				/*---------------- 分享_Start ---------------*/
+				//隐藏顶部下载提示
+				closeDownloadFn(){
+					vm.downloadIsShow = false;
+				},
+				
 				//点击播放音频段落
 				playAudio(type,index){
 					var spokenAudio = $('#spokenAudio').get(0);
 					var audioData = vm.checkShareData.paraList[index];
 					
+					//关闭视频播放
+					if($('#video').length>0){	
+						var videoObj = $('#video').get(0);
+						var audioObj = $('#userAudio').get(0);
+						videoObj.pause(); 
+						audioObj.pause();
+					}
+					
+					//视频播放
 					if(type == 'user'){
 						if(!audioData.userAudio){return;};
 					   	if(audioData.userAudio == vm.shareMediaUrl ){
@@ -288,7 +340,7 @@ let common = {
 								item.isUserPlay = false;
 								item.isParaPlay = false;
 							});
-							vm.spokenAudioUrl = audioData.paraAudio;
+							vm.shareMediaUrl = audioData.paraAudio;
 							audioData.isParaPlay = true;
 							setTimeout(function(){
 								spokenAudio.play();
@@ -299,31 +351,36 @@ let common = {
 				
 				
 				/*---------------- 测试题_S ---------------*/
+				
 				//开始做题
 				startSubject(){
 					var _this = this;
 					var cirqueBox = $('#cirqueBox').get(0);
 					vm.subjectItem = vm.subjectData.level2[0];
+					vm.startPop = false;	//开始弹窗关闭
+					vm.subjectIsShow = true;	//题目显示
+					
+					//开始播放录音
 					setTimeout(()=>{
 						_this.subjectPlayAudio(vm.subjectItem.audioList);
 					},1000);
-					vm.startPop = false;
-					vm.subjectIsShow = true;
+					
+					//监听进度条css3动画结束
 					cirqueBox.addEventListener("animationiteration", function(){
 						vm.examStatus = false;
-						console.log('监听css动画重新开始');
 					});
 					
 					//监听播放结束事件
 					var subjectAudioObj = $('#subjectPlayAudio').get(0);
 					subjectAudioObj.addEventListener("ended",function(){
+						
 						vm.isPlayStatus = false;
 						var audioIndex = vm.currentaudioIndex;
 						var audioList = vm.currentAudioList;
 						if(audioList.length==1){
+							if(!vm.isFirstPlay){return;}
 							vm.examStatus = true;
-							clearInterval(countTimer);
-							vm.remainingTime = 10;
+							vm.isFirstPlay = false;
 							_this.countTime();
 							return;
 						};
@@ -332,17 +389,17 @@ let common = {
 						if(audioIndex < audioList.length){ 
 							vm.subjectItem.options[audioIndex-1].isPlayAudio = true;
 						   	vm.currentAudioUrl = audioList[audioIndex];
-							var timer = setInterval(()=>{
-								if(!vm.isPauseSubject){
-									clearInterval(timer);
+							var timer = setTimeout(()=>{
+								if(!vm.isPauseSubject && !vm.submitStatus){
+									clearTimeout(timer);
 									subjectAudioObj.play();  
 								}
 							},1000);
 						}else{
-							clearInterval(countTimer);
+							if(!vm.isFirstPlay){return;}
 							vm.currentaudioIndex = 0;
 							vm.examStatus = true;
-							vm.remainingTime = 10;
+							vm.isFirstPlay = false;
 							_this.countTime();
 						}
 					},false);
@@ -353,11 +410,14 @@ let common = {
 					var _this = this;
 					var subjectAudioObj = $('#subjectPlayAudio').get(0);
 					if(vm.isPauseSubject){
-						vm.examStatus = true;
+						
 						vm.isPauseSubject = false;
-						if(vm.isPlayStatus){
-							subjectAudioObj.play();
-							_this.countTime();
+						if(vm.isPlayStatus){ 
+							subjectAudioObj.play(); 
+						}
+						if(vm.remainingTime<10000){ 
+							vm.examStatus = true;
+							_this.countTime(); 
 						}
 					}else{
 						clearInterval(countTimer);
@@ -374,13 +434,14 @@ let common = {
 							clearInterval(countTimer);
 							this.skipNextSubject();	//超时进入下一题  
 						}else{
-							vm.remainingTime--;
+							vm.remainingTime -= 100;
 						}
-					},1000);
+					},100);
 				},
 				
 				//测试题播放音频
-				subjectPlayAudio(audioUrl){
+				subjectPlayAudio(audioUrl,event){
+					if(vm.isFirstPlay && event){return;}	//播放状态不能重新播放
 					var _this = this;
 					var subjectAudioObj = $('#subjectPlayAudio').get(0);
 					var audioList = audioUrl.split(',');
@@ -389,10 +450,9 @@ let common = {
 					setTimeout(()=>{
 						if(!vm.isPauseSubject){
 							subjectAudioObj.play();
-							vm.isPlayStatus = true;   
+							vm.isPlayStatus = true;
 						 }
 					},100);
-					
 				},
 				
 				//选择答案(点击选项的索引)
@@ -420,28 +480,45 @@ let common = {
 							}
 					   	});
 						vm.subjectItem = subjectItem;
+						if(subjectItem.contentNum>=subjectItem.contentArr.length-1){
+							
+						   var  contentArr = subjectItem.contentArr.filter((item,index,arr)=>{
+							   return  index<arr.length-1;
+						   });
+							vm.choiceAnswer=contentArr.map((item,index)=>{
+								return subjectItem.options[item.answerIndex].optionCode;
+							}).join(',');
+						}
 					}
 					
 					//选择排序题
 					if(subjectType == 7){
 						subjectItem.answerArr.push(cIndex);
 						vm.subjectItem = subjectItem;
+						if(subjectItem.answerArr.length == subjectItem.options.length){
+						   vm.choiceAnswer = subjectItem.answerArr.map(item=>{
+							   return subjectItem.options[item].optionCode;
+						   }).join(',');
+						}
 					}
 					
 					if(subjectType == 1 || subjectType == 4 || subjectType == 6){
-						this.affirmAnswer();	   
+						vm.choiceAnswer = subjectItem.options[cIndex].optionCode;
+						this.affirmAnswer();
 					}
 					
 				},
 				
-				//判断答案是否正确
-				affirmAnswer(a1,a2,callback){
+				//判断答案是否正确(选择的选项，正确的选项)
+				affirmAnswer(callback){
+					
 					var subjectAudioObj = $('#subjectPlayAudio').get(0);
 					var subjectStore = vm.subjectStore;
-					if(a1 == a2){
+					console.log('answer:',vm.choiceAnswer,vm.subjectItem.answer)
+					if(vm.choiceAnswer == vm.subjectItem.answer){
 						subjectStore = subjectStore + 0.4;
 					}else{
-						subjectStore = subjectStore - 0.7;
+						subjectStore = subjectStore - 0.6;
 					}
 					vm.subjectStore = subjectStore;
 					subjectAudioObj.pause();
@@ -454,16 +531,22 @@ let common = {
 				
 				//跳转下一题
 				skipNextSubject(){
-					
 					var _this = this;
+					this.getStatisticsFn(vm.tjData.shareid,vm.tjData.uniqueNums)
+					var subjectAudioObj = $('#subjectPlayAudio').get(0);
+					subjectAudioObj.pause();
+					var subjectStore = vm.subjectStore;
+					console.log('subjectStore',subjectStore);
 					//判断是否最后一题
 					if(vm.subjectIndex == 4){
 						setTimeout(function(){
-							window.location.href = 'subject-result.html?shareid=1';
+							
+							var level = parseInt(subjectStore);
+							window.location.href = `subject-result.html?shareid=1&level=${level}`;
 						},1000);
 					   	return;
 					}
-					var subjectStore = vm.subjectStore;
+					
 					var subjectData = vm.subjectData;
 					var subjectItem;
 					if(subjectStore < 2){
@@ -480,10 +563,27 @@ let common = {
 						vm.subjectIsShow = true;
 						vm.subjectItem = subjectItem;
 						vm.submitStatus = false;
+						vm.isFirstPlay = true;
+						vm.currentaudioIndex = 0;
+						clearInterval(countTimer);
+						vm.remainingTime = 10000;
 						setTimeout(()=>{
 							_this.subjectPlayAudio(vm.subjectItem.audioList);	//播放音频
 						},1000);
 					},1000);
+				},
+				
+				//统计完成率
+				getStatisticsFn(shareid,uniqueNums){
+					common.ajaxFn({
+						url:`/api/shareInfo/operate/${shareid}`,
+						data:{
+							uniqueNums : uniqueNums
+						},
+						success:(res) => {
+							console.log('统计完成率')
+						}
+					})
 				},
 				
 				//完形填空移除答案
@@ -505,6 +605,44 @@ let common = {
 					
 					subjectItem.options[answerIndex].isChecked = false;
 					vm.subjectItem = subjectItem;
+				},
+				
+				//统计点击下载页面
+				tjDownLoad(shareid,uniqueNums,callback){
+					common.ajaxFn({
+						url:`/api/shareInfo/reach/${shareid}`,
+						data:{
+							uniqueNums : uniqueNums
+						},
+						success:(res) => {
+							callback && callback();
+							console.log('统计结果页：',res)
+						},
+						error:()=>{
+							callback && callback();
+						}
+					})
+				},
+				
+				//测试结果页打开关闭下载弹窗
+				downlaodPopFn(){
+					if(vm.isIos){
+						var url = vm.langData.shareData.downloadAppleUrl;
+						this.tjDownLoad(vm.tjData.shareid,vm.tjData.uniqueNums,()=>{
+							window.location.href = url;
+						})
+						return;
+					}
+					
+					var downloadPopShow = vm.downloadPopShow;
+					vm.downloadPopShow = !downloadPopShow;
+				},
+				
+				//跳转到下载页
+				gotoDownload(gotoUrl){
+					this.tjDownLoad(vm.tjData.shareid,vm.tjData.uniqueNums,()=>{
+						window.location.href = gotoUrl;
+					})
 				}
 			},
 
@@ -515,6 +653,7 @@ let common = {
 			
 			//el 被新创建的 vm.$el 替换
 			mounted() {
+				
 				common.vueIsLoad = true;
 				if(!common.isTest){
 					if(!common.shareId){
@@ -537,7 +676,7 @@ let common = {
 		common.loading();
 		common.isTest = common.GetQueryStringFn('test')?true:false;
 		common.shareId = common.GetQueryStringFn('shareid')?common.GetQueryStringFn('shareid'):null;
-		if(!common.isTest){
+		if(!common.isTest){	
 			
 			if(!common.shareId){
 				
@@ -563,7 +702,9 @@ let common = {
 		}else{
 			common.apiUrl = common.apiTestUrl;
 			//没接到app里测试用的
-			common.langTag('zh',function(){
+			common.currentLang = common.getSystemLang();
+			//common.currentLang = 'en';
+			common.langTag(common.currentLang?common.currentLang:'en',function(){
 				common.vueExample();	//加载vue实例
 			});
 		}

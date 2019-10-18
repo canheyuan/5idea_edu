@@ -6,105 +6,138 @@
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
 <meta content="telephone=no" name="format-detection">
-<title>测试报告分享</title>
+<title></title>
 <link rel="stylesheet" href="static/css/reset.css">
 <link rel="stylesheet" href="static/css/share.css">
 <link rel="stylesheet" href="static/css/subject.css">
 <script src="static/js/conversion.750.js"></script>
 <script src="static/js/zepto.min.js" charset="utf-8"></script>
 <script src="static/js/vue.js" charset="utf-8"></script>
+<!--
 <script src="static/js/shell.js" charset="utf-8"></script>
 <script>
 Shell.init();
 </script>
+-->
 </head>
 
 <body class="gray_body">
-<div id="app" v-cloak>
+<div id="app" v-cloak style="height:100%;">
 	
 <!--测试报告头部-->
 <div class="report_head">
-	<div class="report_top">
-		<div class="title">测试报告</div>
+	<div class="report_top" style="height:5.4rem;">
+		<div class="title" style="padding:.4rem .6rem .2rem;">{{langData.subjectResult.title}}</div>
 		<div class="report_progress">
 		
 			<div class="progress" id="indicatorContainer"></div>
 			<div class="progress_data">
 				<p>Your level</p>
-				<h3>Lv.2</h3>
-				<span>2019-08-12</span>
+				<h3 class="blur" style="margin-bottom:.3rem;">Lv.{{resultData.level}}</h3>
+				<span>{{resultData.today}}</span>
 			</div>
 			
 		</div>
 	</div>
 	
-	<div class="report_data" v-if="reportData.length!=0">
-		<div class="report_title"><i class="icons ico_report"></i>WHAT YOU CAN DO</div>
+	<div class="report_data" v-if="resultData.reportList">
+		<div class="report_title" style="margin-bottom:.1rem;">
+			<i class="icons ico_report"></i>
+			{{langData.subjectResult.reportTitleText}}
+		</div>
+		<div class="report_des">{{resultData.title[currentLang]}}</div>
 		<ul class="report_list">
-			<li class="act" v-for="item in reportData">
+			<li class="act" v-for="(item,index) in resultData.reportList"  v-if="index<5">
 				<span class="cir"><i class="icons"></i></span>
 				<p>{{item[currentLang]}}</p>
 			</li>
-<!--
-			<li class="act">
-				<span class="cir"><i class="icons"></i></span>
-				<p>测试长度因人而异，厉害的才能测完全部3个部分</p>
-			</li>
-			<li>
-				<span class="cir"><i class="icons"></i></span>
-				<p>只有一次中途退出的机会</p>
-			</li>
-			<li>
-				<span class="cir"><i class="icons"></i></span>
-				<p>Phone销量下滑的幅度超出了预期</p>
-			</li>
-			<li>
-				<span class="cir"><i class="icons"></i></span>
-				<p>来自供应链的许多警告信号表明</p>
-			</li>
-			<li>
-				<span class="cir"><i class="icons"></i></span>
-				<p>但是，情况比我们想象的更糟</p>
-			</li>
--->
 		</ul>
 	</div>
 </div>
 	
-<div class="report_ad" style="background:url(static/images/share_ad01.png) no-repeat; background-size:100% auto;">
+<!--
+<div class="report_ad" style="background:url(static/images/share_banner01.png) no-repeat; background-size:100% auto;">
 	<h3>IMPROVE PLAN</h3>
 	<p>只有适合自己的学习方案，才能针对性的针对自己的弱点，获得高效提升</p>
 </div>
 	
+-->
+<!--
 <div style="text-align: center">
 	<div class="share_btn">
 		<i class="icons ico_share"></i><span>分享</span>
 	</div>	
 </div>
-<div style="height:1.2rem;"></div>
+-->
+<div class="download_btm">
+	<div class="white_mask"></div>
+	<div class="download_btm_main">
+		<i class="icons ico_arrow"></i>
+		<div class="txt">{{langData.subjectResult.reportDes2}}</div>
+		<div class="plan_btn" @click="downlaodPopFn">{{langData.subjectResult.downloadBtn}}</div>	
+	</div>
+</div>
+
+
+<!--下载弹窗-->
+<div class="mask_bg" v-show="downloadPopShow">
+	<div class="mask_bg_ctn" style="vertical-align: bottom;">
+		<div class="download_pop_btn">
+			<h3 class="tit">{{langData.subjectResult.popTitle}}</h3>
+			<a @click="gotoDownload(langData.shareData.downloadAppleUrl)"  v-if="isPc">
+				<i class="icons ico_01"></i>App Store
+			</a>
+			<a @click="gotoDownload(langData.shareData.downloadGPUrl)">
+				<i class="icons ico_02"></i>Google Play
+			</a>
+			<a @click="gotoDownload(langData.shareData.downloadMyappUrl)">
+				<i class="icons ico_03"></i>MyApp.com
+			</a>
+		</div>
+		<div class="download_pop_close"  @click="downlaodPopFn">{{langData.subjectResult.closeBtnText}}</div>
+	</div>	
+</div>
 	
-<a href="javascript:;" class="plan_btn">定制专属学习计划</a>
-	
-</div>	
+</div>
 	
 <script src="static/js/radialIndicator.js"></script>
 <script src="static/js/common.js"></script>
 <script>
-
+var tjData = {
+	shareid:'758e1e43956b23aa174f26358111b086',
+	uniqueNums:''
+}
+//初次进入测试题获取信息
+function getStatisticsData(shareid,uniqueNums){
+	common.ajaxFn({
+		url:`/api/shareInfo/access/${shareid}`,
+		data:{
+			uniqueNums : uniqueNums
+		},
+		success:(res) => {
+			console.log('测试题初次加载：',res)
+			tjData['uniqueNums'] = res.data.uniqueNums;
+			vm.tjData = tjData;
+			localStorage.setItem("tjData", JSON.stringify(tjData));
+		}
+	})
+}
 	
 //vue实例加载完后执行的函数
 function vmCreated(){
-
-	//设置页面标题栏
-	var param = {
-		name: "share-report",
-		title: '测试报告',	
-		leftIcon: "back",		//or "close" ，缺省即back
-		backgroundColor: "#00ffffff"	//不设则默认白色
-	}
-	Shell.setPageTitle(JSON.stringify(param));
-	$('title').text('测试报告');
+	setTimeout(()=>{
+		var tjDataStr = localStorage.getItem('tjData');
+		if(tjDataStr){
+			var tjDataStr2 = JSON.parse(tjDataStr)
+			vm.tjData =  tjDataStr2;
+		}else{
+			getStatisticsData(tjData.shareid)
+		}
+	},500)
 	
+	$('title').text(common.langDatas.subjectResult.title);
+	var level = common.GetQueryStringFn('level')?common.GetQueryStringFn('level'):2;
+	level = level<1?1:level;
 	var radialObj = radialIndicator('#indicatorContainer', {
 		barColor: '#ffffff',
 		barBgColor:'rgba(255,255,255,.2)',	//外框背景色
@@ -116,36 +149,42 @@ function vmCreated(){
 		percentage: true
 	});
 	
-	common.ajaxFn({
-		url:`/api/shareInfo/userExamShareInfo/${common.shareId}`,
+	//用Math.random()函数生成0~1之间的随机数与0.5比较，返回-1或1，从而达到重新排列数组
+	function randomsort(a, b) {
+		return Math.random()>.5 ? -1 : 1;
+	}
+	
+	//获取当前时间
+	var timestamp = (new Date()).getTime();
+	var today = common.getDate(timestamp).substring(0,10);
+	$.ajax({
+		url:`static/json/report.json`,
+		type: 'get',
+		dataType: "json",
 		success:(res)=>{
-			var datas =  res.data;
-			vm.checkShareData = datas;
-			radialObj.animate(parseInt(100*datas.level/6));
 			
-			$.ajax({
-				url:`static/json/report.json`,
-				type: 'get',
-				dataType: "json",
-				success:(res)=>{
-					console.log(res);
-					vm.reportData = res[datas.level-1].content;
-				},
-			});
+			var reportList = res[level-1].content;
+			reportList.sort(randomsort);
+			vm.resultData = {
+				title:res[level-1].title,
+				level:level,
+				reportList:reportList,
+				today:today
+			};
+			console.log('vm.reportData',vm.reportData)
+			//radialObj.animate(parseInt(100*2/6));
 		}
 	});
-	
 
 }
 
 
 $(function(){
 	//获取用户id再执行函数
-	Shell.getSessionId(function(res){
-		common.sessionId = res;
-		common.vueIsLoad && vmCreated();
-	});
-	
+//	Shell.getSessionId(function(res){
+//		common.sessionId = res;
+//		common.vueIsLoad && vmCreated();
+//	});
 });
 </script>
 </body>

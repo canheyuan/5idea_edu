@@ -12,52 +12,94 @@
 <script src="static/js/conversion.750.js"></script>
 <script src="static/js/zepto.min.js" charset="utf-8"></script>
 <script src="static/js/vue.js" charset="utf-8"></script>
+<!--
 <script src="static/js/shell.js" charset="utf-8"></script>
 <script>
 Shell.init();
 </script>
+-->
 </head>
 
 <body class="gray_body">
 <div id="app" v-cloak>
 	
-</div>
+
 
 <!--顶部提示下载-->
-<div class="share_top clearfix">
+<div :class="['share_top','clearfix',{download_show:downloadIsShow}]">
 	<div class="logo"><img src="static/images/logo.png" alt=""></div>
-	<a href="javascript:;" class="down_btn">Download</a>
+	<a :href="isIos?langData.shareData.downloadAppleUrl:'#download_mdl'" class="down_btn">
+		{{langData.shareData.topBtn}}
+	</a>
 	<div class="info">
-		<h3>CHIease</h3>
-		<p>懂汉语，你就是下一位封面人物两行样式</p>
+		<h3>{{langData.shareData.topTitle}}</h3>
+		<p>{{checkShareData.shareTitle}}</p>
 	</div>
-	<span class="close_btn"><i class="icons"></i></span>
+	<span class="close_btn" @click="closeDownloadFn"><i class="icons"></i></span>
 </div>
 	
 <!--定制课头部-->
 <div class="custom_head">
 	<div class="star_list">
-		<span class="act"></span>
-		<span class="act"></span>
-		<span></span>
+		<span v-for="item in [1,2,3]" :class="{'act':item<=checkShareData.star}"></span>
 	</div>
-	<div class="score">86</div>
-	<div class="text">你的朋友在CHIease学习汉语<br>取得了86分的好成绩～</div>
+	<div class="score">{{checkShareData.score}}</div>
+	<div class="text">
+		{{langData.shareCustom.headText01}}<br>
+		{{langData.shareCustom.headText02 + checkShareData.score + langData.shareCustom.headText03}}
+	</div>
 	
 	<div class="custom_data">
 		<div class="money"><i class="icons ico_money"></i></div>
 		<div class="info">
-			<h3>共获得 57 五行币</h3>
-			<h4>答题正确</h4>
-			<p>+ 48 五行币</p>
-			<h4>主动录音</h4>
-			<p>+ 9 五行币</p>
+			<h3>{{langData.shareCustom.totalCoinText}} {{checkShareData.totalCoin}} {{langData.shareCustom.coin}}</h3>
+			<h4>{{langData.shareCustom.rightTitle}}</h4>
+			<p>+ {{checkShareData.rightCoin}} {{langData.shareCustom.coin}}</p>
+			<h4>{{langData.shareCustom.initiativeTitle}}</h4>
+			<p>+ {{checkShareData.initiativeCoin}} {{langData.shareCustom.coin}}</p>
 		</div>
-		<a href="javascript:;" class="btn">我要挑战</a>
+		<a class="btn" :href="isIos?langData.shareData.downloadAppleUrl:'#download_mdl'">
+			{{langData.shareData.challengeBtn}}
+		</a>
 	</div>
 </div>
 
 <!--录音列表-->
+<div class="share_record">
+	<div class="record_title"><i class="icons ico_zan"></i>{{langData.shareData.bestTitle}}</div>
+	<div class="record_list">
+		
+		<div class="record_item" v-for="(item,index) in checkShareData.paraList">
+			<h4 class="tit">{{item.content.zh}}</h4>
+			<ul class="audio_list">
+				<li>
+					<div class="play_box" @click="playAudio('user',index)">
+						<img :src="checkShareData.headImg" alt="">
+						<div class="mask"></div>
+						<i :class="item.isUserPlay?'icons ico_stop':'icons ico_play'"></i>
+					</div>
+					<div class="text">
+						{{langData.shareData.recordText01}} - <span class="orange">{{item.score}}{{langData.shareData.scoreText}}</span>
+					</div>
+					
+				</li>
+				<li>
+					<div class="play_box" @click="playAudio('para',index)">
+						<i :class="item.isParaPlay?'icons ico_stop':'icons ico_play'"></i>
+						<div class="progress"></div>
+					</div>
+					<div class="text">{{langData.shareData.recordText02}}</div>
+				</li>
+			</ul>
+		</div>
+		
+		<audio id="spokenAudio" class="audio" :src="shareMediaUrl"></audio>
+		
+	</div>
+</div>
+	
+<!--录音列表-->
+<!--
 <div class="share_record">
 	<div class="record_title"><i class="icons ico_zan"></i>表现最佳的句子</div>
 	<div class="record_list">
@@ -106,40 +148,40 @@ Shell.init();
 		
 	</div>
 </div>
+-->
 
 <!--下载-->
-<div class="download_mdl">
+<div class="download_mdl" id="download_mdl">
 	<div class="down_head">
 		<div class="title">
-			<h3>CHIease | 听说读写</h3>
-			<p>以点起步，以线过渡，以面全面巩固</p>
+			<h3>{{langData.shareData.headTitle}}</h3>
+			<p>{{checkShareData.shareDesc}}</p>
 		</div>
 		<img class="head_img" src="static/images/share_img01.jpg" alt="">
+		<img class="down_tit" src="static/images/down_head.png" alt="" >
 	</div>
-	<div class="down_btns">
-		<a class="apply_btn" href="javascript:;">
-			<i class="icons ico_apply"></i>
+	<div class="down_btns"  v-if="isAndroid || isPc">
+		<a :href="langData.shareData.downloadAppleUrl" v-if="isPc">
+			<img src="static/images/downbtn01.png" alt="">
+		</a>
+		<a :href="langData.shareData.downloadGPUrl">
+			<img src="static/images/downbtn02.png" alt="">
+		</a>
+		<a :href="langData.shareData.downloadMyappUrl">
+			<img src="static/images/downbtn03.png" alt="">
+		</a>
+	</div>
+	<div class="down_btns2" v-if="isIos">
+		<a class="apply_btn" :href="langData.shareData.downloadAppleUrl">
+			<i class="icons"></i>
 			<h4>Download</h4>
 			<p>on the App Store</p>
-		</a>
-		<a class="android_btn" href="javascript:;">
-			<i class="icons ico_android"></i>
-			<h4>Download</h4>
-			<p>on the Google Play</p>
 		</a>
 	</div>
 </div>
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</div>	
 	
 	
 <script src="static/js/common.js"></script>
@@ -147,41 +189,54 @@ Shell.init();
 	
 //vue实例加载完后执行的函数
 function vmCreated(){
-
-	//设置页面标题栏
-	var param = {
-		name: "punch-tip",
-		title: common.langDatas.punchTip.title,	
-		leftIcon: "back",		//or "close" ，缺省即back
-		backgroundColor: "#00ffffff"	//不设则默认白色
-	}
-	Shell.setPageTitle(JSON.stringify(param));
-	$('title').text(common.langDatas.punchTip.title);
 	
-	punchCheck();
-
-}
+	$('title').text(common.langDatas.shareCustom.title);
 	
-//打卡查询
-function punchCheck(){
 	common.ajaxFn({
-		url:'/api/userPunch/detail',
-		success:(res) => {
-			var checkData = res.data;
-			checkData['studiedTimeMinute'] = parseInt(checkData.studiedTime/60);
-			vm.checkData = checkData;
+		url:`/api/shareInfo/cusStuShareInfo/${common.shareId}`,
+		success:(res)=>{
+			var datas =  res.data;
+			if(datas.paraList){
+				datas.paraList.forEach(item=>{
+					item.isUserPlay = false;
+					item.isParaPlay = false;
+				});
+			}
+			
+			console.log('定制课分享：',datas);
+			vm.checkShareData = datas;
+			
+			//根绝接口传入的语言加载语言包
+			if(datas.lan != common.currentLang && datas.lan){
+			   	common.langTag(datas.lan,function(result){
+					vm.langData = result;
+				});
+			}
+			
+			//监听音频停止事件
+			var spokenAudio = $('#spokenAudio').get(0);
+			spokenAudio.addEventListener("pause",function(){
+				var audioDataList = vm.checkShareData.paraList;
+				audioDataList.forEach(item=>{
+					item.isUserPlay = false;
+					item.isParaPlay = false;
+				});
+			},false);	
+			
 		}
 	});
-}	
 
-$(function(){
-	//获取用户id再执行函数
-	Shell.getSessionId(function(res){
-		common.sessionId = res;
-		common.vueIsLoad && vmCreated();
-	});
-	
-});
+}
+
+
+//$(function(){
+//	//获取用户id再执行函数
+//	Shell.getSessionId(function(res){
+//		common.sessionId = res;
+//		common.vueIsLoad && vmCreated();
+//	});
+//	
+//});
 </script>
 </body>
 </html>

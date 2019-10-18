@@ -1,6 +1,6 @@
 {
 	"yunmu":["a","o","e","i","u","ü","ai","ei","ao","ou","ia","ie","ua","uo","üe","iao","iu","uai","ui","an","ang","ian","iang","uan","uang","en","eng","un","in","ing","ong","iong","üan","ün","er"],
-	"shengmu":["","b","p","m","f","d","t","n","l","g","k","h","j","q","x","z","c","s","zh","sh","sh","r","y","w"],
+	"shengmu":["","b","p","m","f","d","t","n","l","g","k","h","j","q","x","z","c","s","zh","sh","ch","r","y","w"],
 	"yinbiao":{
 		"a":["ā","á","ǎ","à"],
 		"o":["ō","ó","ǒ","ò"],
@@ -687,11 +687,11 @@
 				},
 				{
 					"val":"bín",
-					"url":"bin2.mp3"
+					"url":""
 				},
 				{
 					"val":"bǐn",
-					"url":"bin3.mp3"
+					"url":""
 				},
 				{
 					"val":"bìn",
@@ -891,7 +891,7 @@
 				},
 				{
 					"val":"pěi",
-					"url":"pei3.mp3"
+					"url":""
 				},
 				{
 					"val":"pèi",
@@ -963,7 +963,7 @@
 				},
 				{
 					"val":"pǎn",
-					"url":"pan3.mp3"
+					"url":""
 				},
 				{
 					"val":"pàn",
@@ -981,11 +981,11 @@
 				},
 				{
 					"val":"pěn",
-					"url":"pen3.mp3"
+					"url":""
 				},
 				{
 					"val":"pèn",
-					"url":"pen4.mp3"
+					"url":""
 				}
 			],
 			"in":[
@@ -1017,7 +1017,7 @@
 				},
 				{
 					"val":"pǎng",
-					"url":"pang3.mp3"
+					"url":""
 				},
 				{
 					"val":"pàng",
@@ -1053,7 +1053,7 @@
 				},
 				{
 					"val":"pǐng",
-					"url":"ping3.mp3"
+					"url":""
 				},
 				{
 					"val":"pìng",
@@ -1083,7 +1083,7 @@
 			"ian":[
 				{
 					"val":"miān",
-					"url":"mian1.mp3"
+					"url":""
 				},
 				{
 					"val":"mián",
@@ -1173,7 +1173,7 @@
 			"u":[
 				{
 					"val":"mū",
-					"url":"mu1.mp3"
+					"url":""
 				},
 				{
 					"val":"mú",
@@ -1245,7 +1245,7 @@
 			"ou":[
 				{
 					"val":"mōu",
-					"url":"mou1.mp3"
+					"url":""
 				},
 				{
 					"val":"móu",
@@ -1325,7 +1325,7 @@
 				},
 				{
 					"val":"měn",
-					"url":"men3.mp3"
+					"url":""
 				},
 				{
 					"val":"mèn",
@@ -1335,7 +1335,7 @@
 			"in":[
 				{
 					"val":"mīn",
-					"url":"min1.mp3"
+					"url":""
 				},
 				{
 					"val":"mín",
@@ -1347,13 +1347,13 @@
 				},
 				{
 					"val":"mìn",
-					"url":"min4.mp3"
+					"url":""
 				}
 			],
 			"ang":[
 				{
 					"val":"māng",
-					"url":"mang1.mp3"
+					"url":""
 				},
 				{
 					"val":"máng",
@@ -1365,7 +1365,7 @@
 				},
 				{
 					"val":"màng",
-					"url":"mang4.mp3"
+					"url":""
 				}
 			],
 			"eng":[
@@ -1389,7 +1389,7 @@
 			"ing":[
 				{
 					"val":"mīng",
-					"url":"ming1.mp3"
+					"url":""
 				},
 				{
 					"val":"míng",
@@ -1485,7 +1485,7 @@
 				},
 				{
 					"val":"fóu",
-					"url":"fou2.mp3"
+					"url":""
 				},
 				{
 					"val":"fǒu",
@@ -1779,7 +1779,7 @@
 				},
 				{
 					"val":"dǔi",
-					"url":"dui3.mp3"
+					"url":""
 				},
 				{
 					"val":"dùi",
@@ -1811,7 +1811,7 @@
 				},
 				{
 					"val":"dóu",
-					"url":"dou2.mp3"
+					"url":""
 				},
 				{
 					"val":"dǒu",
@@ -1851,11 +1851,11 @@
 				},
 				{
 					"val":"dǐe",
-					"url":"die3.mp3"
+					"url":""
 				},
 				{
 					"val":"dìe",
-					"url":"die4.mp3"
+					"url":""
 				}
 			],
 			"an":[
@@ -2051,11 +2051,11 @@
 				},
 				{
 					"val":"tuǎn",
-					"url":"tuan3.mp3"
+					"url":""
 				},
 				{
 					"val":"tuàn",
-					"url":"tuan4.mp3"
+					"url":""
 				}
 			],
 			"a":[
@@ -2141,7 +2141,7 @@
 				},
 				{
 					"val":"tǎi",
-					"url":"tai3.mp3"
+					"url":""
 				},
 				{
 					"val":"tài",
@@ -2296,7 +2296,7 @@
 			"eng":[
 				{
 					"val":"tēng",
-					"url":"teng1.mp3"
+					"url":""
 				},
 				{
 					"val":"téng",
@@ -2308,7 +2308,7 @@
 				},
 				{
 					"val":"tèng",
-					"url":"teng4.mp3"
+					"url":""
 				}
 			],
 			"ing":[
@@ -2428,7 +2428,7 @@
 				},
 				{
 					"val":"nuán",
-					"url":"nuan2.mp3"
+					"url":""
 				},
 				{
 					"val":"nuǎn",
@@ -2536,7 +2536,7 @@
 				},
 				{
 					"val":"nái",
-					"url":"nai2.mp3"
+					"url":""
 				},
 				{
 					"val":"nǎi",
@@ -2608,7 +2608,7 @@
 				},
 				{
 					"val":"níe",
-					"url":"nie2.mp3"
+					"url":""
 				},
 				{
 					"val":"nǐe",
@@ -2648,7 +2648,7 @@
 				},
 				{
 					"val":"nǎn",
-					"url":"nan3.mp3"
+					"url":""
 				},
 				{
 					"val":"nàn",
@@ -2720,11 +2720,11 @@
 				},
 				{
 					"val":"něng",
-					"url":"neng3.mp3"
+					"url":""
 				},
 				{
 					"val":"nèng",
-					"url":"neng4.mp3"
+					"url":""
 				}
 			],
 			"ing":[
@@ -2738,7 +2738,7 @@
 				},
 				{
 					"val":"nǐng",
-					"url":"ning3.mp3"
+					"url":""
 				},
 				{
 					"val":"nìng",
@@ -2756,7 +2756,7 @@
 				},
 				{
 					"val":"nǒng",
-					"url":"nong3.mp3"
+					"url":""
 				},
 				{
 					"val":"nòng",
@@ -2988,7 +2988,7 @@
 			"ü":[
 				{
 					"val":"lǖ",
-					"url":"lv1.mp3"
+					"url":""
 				},
 				{
 					"val":"lǘ",
@@ -3006,7 +3006,7 @@
 			"ai":[
 				{
 					"val":"lāi",
-					"url":"lai1.mp3"
+					"url":""
 				},
 				{
 					"val":"lái",
@@ -3014,7 +3014,7 @@
 				},
 				{
 					"val":"lǎi",
-					"url":"lai3.mp3"
+					"url":""
 				},
 				{
 					"val":"lài",
@@ -3176,7 +3176,7 @@
 				},
 				{
 					"val":"lǔn",
-					"url":"lun3.mp3"
+					"url":""
 				},
 				{
 					"val":"lùn",
@@ -3204,7 +3204,7 @@
 			"eng":[
 				{
 					"val":"lēng",
-					"url":"leng1.mp3"
+					"url":""
 				},
 				{
 					"val":"léng",
@@ -3300,7 +3300,7 @@
 				},
 				{
 					"val":"guái",
-					"url":"guai2.mp3"
+					"url":""
 				},
 				{
 					"val":"guǎi",
@@ -3390,7 +3390,7 @@
 				},
 				{
 					"val":"gú",
-					"url":"gu2.mp3"
+					"url":""
 				},
 				{
 					"val":"gǔ",
@@ -3691,24 +3691,6 @@
 					"url":"kuang4.mp3"
 				}
 			],
-			"ei":[
-				{
-					"val":"kēi",
-					"url":"kei1.mp3"
-				},
-				{
-					"val":"kéi",
-					"url":""
-				},
-				{
-					"val":"kěi",
-					"url":""
-				},
-				{
-					"val":"kèi",
-					"url":""
-				}
-			],
 			"a":[
 				{
 					"val":"kā",
@@ -3868,7 +3850,7 @@
 				},
 				{
 					"val":"kèn",
-					"url":"ken4.mp3"
+					"url":""
 				}
 			],
 			"un":[
@@ -4332,7 +4314,7 @@
 				},
 				{
 					"val":"jián",
-					"url":"jian2.mp3"
+					"url":""
 				},
 				{
 					"val":"jiǎn",
@@ -4472,11 +4454,11 @@
 			"üe":[
 				{
 					"val":"juē",
-					"url":"jve1.mp3"
+					"url":"jue1.mp3"
 				},
 				{
 					"val":"jué",
-					"url":"jve2.mp3"
+					"url":"jue2.mp3"
 				},
 				{
 					"val":"juě",
@@ -4484,7 +4466,7 @@
 				},
 				{
 					"val":"juè",
-					"url":"jve4.mp3"
+					"url":"jue4.mp3"
 				}
 			],
 			"in":[
@@ -4550,7 +4532,7 @@
 				},
 				{
 					"val":"qiá",
-					"url":"qia2.mp3"
+					"url":""
 				},
 				{
 					"val":"qiǎ",
@@ -4727,11 +4709,11 @@
 			"üe":[
 				{
 					"val":"quē",
-					"url":"qve1.mp3"
+					"url":"que1.mp3"
 				},
 				{
 					"val":"qué",
-					"url":"qve2.mp3"
+					"url":"que2.mp3"
 				},
 				{
 					"val":"quě",
@@ -4739,7 +4721,7 @@
 				},
 				{
 					"val":"què",
-					"url":"qve4.mp3"
+					"url":"que4.mp3"
 				}
 			],
 			"in":[
@@ -4927,19 +4909,19 @@
 			"ü":[
 				{
 					"val":"xū",
-					"url":"xv1.mp3"
+					"url":"xu1.mp3"
 				},
 				{
 					"val":"xú",
-					"url":"xv2.mp3"
+					"url":"xu2.mp3"
 				},
 				{
 					"val":"xǔ",
-					"url":"xv3.mp3"
+					"url":"xu3.mp3"
 				},
 				{
 					"val":"xù",
-					"url":"xv4.mp3"
+					"url":"xu4.mp3"
 				}
 			],
 			"iu":[
@@ -4949,7 +4931,7 @@
 				},
 				{
 					"val":"xíu",
-					"url":"xiu2.mp3"
+					"url":""
 				},
 				{
 					"val":"xǐu",
@@ -4981,19 +4963,19 @@
 			"üe":[
 				{
 					"val":"xuē",
-					"url":"xve1.mp3"
+					"url":"xue1.mp3"
 				},
 				{
 					"val":"xué",
-					"url":"xve2.mp3"
+					"url":"xue2.mp3"
 				},
 				{
 					"val":"xuě",
-					"url":"xve3.mp3"
+					"url":"xue3.mp3"
 				},
 				{
 					"val":"xuè",
-					"url":"xve4.mp3"
+					"url":"xue4.mp3"
 				}
 			],
 
@@ -5018,11 +5000,11 @@
 			"ün":[
 				{
 					"val":"xūn",
-					"url":"xvn1.mp3"
+					"url":"xun1.mp3"
 				},
 				{
 					"val":"xún",
-					"url":"xvn2.mp3"
+					"url":"xun2.mp3"
 				},
 				{
 					"val":"xǔn",
@@ -5030,7 +5012,7 @@
 				},
 				{
 					"val":"xùn",
-					"url":"xvn4.mp3"
+					"url":"xun4.mp3"
 				}
 			],
 			"ing":[
@@ -5101,7 +5083,7 @@
 				{
 
 					"val":"zhuǒ",
-					"url":"zhuo3.mp3"
+					"url":""
 				},
 				{
 					"val":"zhuò",
@@ -5115,7 +5097,7 @@
 				},
 				{
 					"val":"zhuái",
-					"url":"zhuai2.mp3"
+					"url":""
 				},
 				{
 					"val":"zhuǎi",
@@ -5596,24 +5578,7 @@
 					"url":"chai4.mp3"
 				}
 			],
-			"ei":[
-				{
-					"val":"chēi",
-					"url":"chei1.mp3"
-				},
-				{
-					"val":"chéi",
-					"url":"chei2.mp3"
-				},
-				{
-					"val":"chěi",
-					"url":"chei3.mp3"
-				},
-				{
-					"val":"chèi",
-					"url":"chei4.mp3"
-				}
-			],
+
 			"ui":[
 				{
 					"val":"chūi",
@@ -5719,7 +5684,7 @@
 				},
 				{
 					"val":"chùn",
-					"url":"chun4.mp3"
+					"url":""
 				}
 			],
 			"ang":[
@@ -5884,7 +5849,7 @@
 				},
 				{
 					"val":"shuàng",
-					"url":"shuang4.mp3"
+					"url":""
 				}
 			],
 			"a":[
@@ -6020,7 +5985,7 @@
 				},
 				{
 					"val":"shóu",
-					"url":"shou2.mp3"
+					"url":""
 				},
 				{
 					"val":"shǒu",
@@ -6070,7 +6035,7 @@
 			"un":[
 				{
 					"val":"shūn",
-					"url":"shun1.mp3"
+					"url":""
 				},
 				{
 					"val":"shún",
@@ -6261,7 +6226,7 @@
 				},
 				{
 					"val":"rǒu",
-					"url":"rou3.mp3"
+					"url":""
 				},
 				{
 					"val":"ròu",
@@ -6283,7 +6248,7 @@
 				},
 				{
 					"val":"ràn",
-					"url":"ran4.mp3"
+					"url":""
 				}
 			],
 			"en":[
@@ -6355,7 +6320,7 @@
 				},
 				{
 					"val":"rèng",
-					"url":"reng4.mp3"
+					"url":""
 				}
 			],
 			"ong":[
@@ -6493,7 +6458,7 @@
 				},
 				{
 					"val":"zái",
-					"url":"zai2.mp3"
+					"url":""
 				},
 				{
 					"val":"zǎi",
@@ -6935,7 +6900,7 @@
 				},
 				{
 					"val":"càng",
-					"url":"cang4.mp3"
+					"url":""
 				}
 			],
 			"eng":[
@@ -7208,7 +7173,7 @@
 				},
 				{
 					"val":"sùn",
-					"url":"sun4.mp3"
+					"url":""
 				}
 			],
 			"ang":[
@@ -7244,7 +7209,7 @@
 				},
 				{
 					"val":"sèng",
-					"url":"seng4.mp3"
+					"url":""
 				}
 			],
 			"ong":[
@@ -7310,15 +7275,15 @@
 				},
 				{
 					"val":"yó",
-					"url":"yo2.mp3"
+					"url":""
 				},
 				{
 					"val":"yǒ",
-					"url":"yo3.mp3"
+					"url":""
 				},
 				{
 					"val":"yò",
-					"url":"yo4.mp3"
+					"url":""
 				}
 			],
 			"e":[
@@ -7360,19 +7325,19 @@
 			"ü":[
 				{
 					"val":"yū",
-					"url":"yv1.mp3"
+					"url":"yu1.mp3"
 				},
 				{
 					"val":"yú",
-					"url":"yv2.mp3"
+					"url":"yu2.mp3"
 				},
 				{
 					"val":"yǔ",
-					"url":"yv3.mp3"
+					"url":"yu3.mp3"
 				},
 				{
 					"val":"yù",
-					"url":"yv4.mp3"
+					"url":"yu4.mp3"
 				}
 			],
 			"ao":[
@@ -7415,19 +7380,19 @@
 			"üe":[
 				{
 					"val":"yuē",
-					"url":"yve1.mp3"
+					"url":"yue1.mp3"
 				},
 				{
 					"val":"yué",
-					"url":"yve2.mp3"
+					"url":"yue2.mp3"
 				},
 				{
 					"val":"yuě",
-					"url":"yve3.mp3"
+					"url":"yue3.mp3"
 				},
 				{
 					"val":"yuè",
-					"url":"yve4.mp3"
+					"url":"yue4.mp3"
 				}
 			],
 
@@ -7470,19 +7435,19 @@
 			"ün":[
 				{
 					"val":"yūn",
-					"url":"yv1.mp3"
+					"url":"yun1.mp3"
 				},
 				{
 					"val":"yún",
-					"url":"yv2.mp3"
+					"url":"yun2.mp3"
 				},
 				{
 					"val":"yǔn",
-					"url":"yv3.mp3"
+					"url":"yun3.mp3"
 				},
 				{
 					"val":"yùn",
-					"url":"yv4.mp3"
+					"url":"yun4.mp3"
 				}
 			],
 			"ang":[
@@ -7566,7 +7531,7 @@
 				},
 				{
 					"val":"wó",
-					"url":"wo2.mp3"
+					"url":""
 				},
 				{
 					"val":"wǒ",
@@ -7602,7 +7567,7 @@
 				},
 				{
 					"val":"wái",
-					"url":"wai2.mp3"
+					"url":""
 				},
 				{
 					"val":"wǎi",
@@ -7692,7 +7657,7 @@
 				},
 				{
 					"val":"wéng",
-					"url":"weng2.mp3"
+					"url":""
 				},
 				{
 					"val":"wěng",

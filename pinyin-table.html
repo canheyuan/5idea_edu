@@ -11,6 +11,10 @@
 <link rel="stylesheet" href="static/css/base.css">
 <script src="static/js/conversion.750.js" charset="utf-8"></script>
 <script src="static/js/zepto.min.js" charset="utf-8"></script>
+<script src="static/json/pinyin.js" charset="utf-8"></script>
+<style>
+	html,body{width:100%;}	
+</style>
 </head>
 <body>
 <!--顶部-->
@@ -62,18 +66,25 @@
 </div>
 	
 <script>
-let pinyinData = null;
+//let pinyinData = null;
+var domainUrl = '';
+var domain = location.protocol+'//'+location.host;
+if(domain=='https://www.5ideachinese.com'){
+	domainUrl = 'https://res.5ideachinese.com';
+}else{
+	domainUrl = 'https://test.5ideachinese.com/profile';
+}
 $(function(){
-	$.ajax({
-		url:'static/json/pinyin.json',
-		type: 'get',
-		dataType: "json",
-		success:(res)=>{
-			console.log('拼音json：',res)
-			//添加声母和韵母html代码
-			pinyinData = res;
-			var html_head = res.yunmu.map(item=>{return `<li data-val="${item}">${item}</li>`}).join('');
-			var html_side = res.shengmu.map(item=>{return `<li data-val="${item}">${item}</li>`}).join('');
+	//$.ajax({
+	//	url:'static/json/pinyin.json',
+	//	type: 'get',
+	//	dataType: "json",
+	//	success:(res)=>{
+	//		console.log('拼音json：',res)
+	//		//添加声母和韵母html代码
+	//		pinyinData = res;
+			var html_head = pinyinData.yunmu.map(item=>{return `<li data-val="${item}">${item}</li>`}).join('');
+			var html_side = pinyinData.shengmu.map(item=>{return `<li data-val="${item}">${item}</li>`}).join('');
 			$('#pinyin_side ul').append(html_side);
 			$('#pinyin_head ul').append(html_head);
 			
@@ -117,8 +128,8 @@ $(function(){
 				$('.pinyin_head').css('transform','translateX('+ hL +'px)');
 			});
 			
-		}
-	});
+	//	}
+	//});
 	
 	//打开音频弹窗
 	$('#pinyin_ctn').on('click','li',function(){
@@ -128,7 +139,7 @@ $(function(){
 		var pyValArr = pinyinData.pinyin[smVal][ymVal];
 		
 		var html = pyValArr.map((item,i)=>{
-			var htmlTxt = item.url?`<li audio-url="static/mp3/${item.url}" >${item.val}</li>`:`<li class="gray">N/A</li>`;
+			var htmlTxt = item.url?`<li audio-url="${domainUrl}/voice/pinyin/${item.url}" >${item.val}</li>`:`<li class="gray">N/A</li>`;
 			return htmlTxt;
 		}).join('');
 		
@@ -154,7 +165,10 @@ $(function(){
 	//打开声母韵母音频文件
 	$('#pinyin_side,#pinyin_head').on('click','.pinyin_list li',function(e){
 		var mp3Name = $(this).attr('data-val');
-		var audio_url = `static/mp3/${mp3Name}.mp3`;
+		if(!pinyinData.pinyin['ym'][mp3Name]){
+			return;   
+		}
+		var audio_url = `${domainUrl}/voice/pinyin/${mp3Name}.mp3`;
 		$('#smName').text(mp3Name);
 		$('#pinyin_pop2').show();
 		$('#audio2').attr('src',audio_url).get(0).play();

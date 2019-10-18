@@ -6,33 +6,36 @@
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
 <meta content="telephone=no" name="format-detection">
-<title>CHIease - 您的汉语私教</title>
+<title></title>
 <link rel="stylesheet" href="static/css/reset.css">
 <link rel="stylesheet" href="static/css/base.css">
 <link rel="stylesheet" href="static/css/share.css">
 <script src="static/js/conversion.750.js"></script>
 <script src="static/js/zepto.min.js" charset="utf-8"></script>
 <script src="static/js/vue.js" charset="utf-8"></script>
+<!--
 <script src="static/js/shell.js" charset="utf-8"></script>
 <script>
 Shell.init();
 </script>
+-->
 </head>
 
 <body class="gray_body">
+
 <div id="app" v-cloak>
 	
-
-
 <!--顶部提示下载-->
-<div class="share_top clearfix">
+<div :class="['share_top','clearfix',{download_show:downloadIsShow}]">
 	<div class="logo"><img src="static/images/logo.png" alt=""></div>
-	<a href="javascript:;" class="down_btn">Download</a>
+	<a :href="isIos?langData.shareData.downloadAppleUrl:'#download_mdl'" class="down_btn">
+		{{langData.shareData.topBtn}}
+	</a>
 	<div class="info">
-		<h3>CHIease</h3>
-		<p>懂汉语，你就是下一位封面人物两行样式</p>
+		<h3>{{langData.shareData.topTitle}}</h3>
+		<p>{{checkShareData.shareTitle}}</p>
 	</div>
-	<span class="close_btn"><i class="icons"></i></span>
+	<span class="close_btn" @click="closeDownloadFn"><i class="icons"></i></span>
 </div>
 	
 <!--打卡分享-->
@@ -40,10 +43,14 @@ Shell.init();
 	<div class="punch_head">
 		<img class="img" src="static/images/dk_top.png" alt="">
 
-		<div class="txt" style="font-size:.34rem; line-height:.6rem; top:.3rem;">你的朋友在CHIease已连续<br>打卡{{checkShareData.lastPunchDay}}{{langData.punchCard.dayText}}</div>
-		<div 
-			class="btn" id="punchBtn" 
-		>我也要打卡</div>
+		<div class="txt" style="font-size:.34rem; line-height:.6rem; top:.3rem;">
+			{{langData.sharePunch.headText01}}<br v-if="currentLang=='zh'">
+			{{langData.sharePunch.headText02}} {{checkShareData.lastPunchDay}} {{langData.sharePunch.headText03}}
+		</div>
+		<a 
+			class="btn" id="punchBtn"
+			:href="isIos?langData.shareData.downloadAppleUrl:'#download_mdl'"
+		>{{langData.sharePunch.punchBtnText}}</a>
 	</div>
 
 	<ul class="punch_data">
@@ -67,24 +74,31 @@ Shell.init();
 	
 
 <!--下载-->
-<div class="download_mdl">
+<div class="download_mdl" id="download_mdl">
 	<div class="down_head">
 		<div class="title">
-			<h3>CHIease | 听说读写</h3>
-			<p>以点起步，以线过渡，以面全面巩固</p>
+			<h3>{{langData.shareData.headTitle}}</h3>
+			<p>{{checkShareData.shareDesc}}</p>
 		</div>
 		<img class="head_img" src="static/images/share_img01.jpg" alt="">
+		<img class="down_tit" src="static/images/down_head.png" alt="" >
 	</div>
-	<div class="down_btns">
-		<a class="apply_btn" href="javascript:;">
-			<i class="icons ico_apply"></i>
+	<div class="down_btns"  v-if="isAndroid || isPc">
+		<a :href="langData.shareData.downloadAppleUrl" v-if="isPc">
+			<img src="static/images/downbtn01.png" alt="">
+		</a>
+		<a :href="langData.shareData.downloadGPUrl">
+			<img src="static/images/downbtn02.png" alt="">
+		</a>
+		<a :href="langData.shareData.downloadMyappUrl">
+			<img src="static/images/downbtn03.png" alt="">
+		</a>
+	</div>
+	<div class="down_btns2" v-if="isIos">
+		<a class="apply_btn" :href="langData.shareData.downloadAppleUrl">
+			<i class="icons"></i>
 			<h4>Download</h4>
 			<p>on the App Store</p>
-		</a>
-		<a class="android_btn" href="javascript:;">
-			<i class="icons ico_android"></i>
-			<h4>Download</h4>
-			<p>on the Google Play</p>
 		</a>
 	</div>
 </div>
@@ -98,14 +112,14 @@ Shell.init();
 function vmCreated(){
 
 	//设置页面标题栏
-	var param = {
-		name: "punch-tip",
-		title: common.langDatas.punchTip.title,	
-		leftIcon: "back",		//or "close" ，缺省即back
-		backgroundColor: "#00ffffff"	//不设则默认白色
-	}
-	Shell.setPageTitle(JSON.stringify(param));
-	$('title').text(common.langDatas.punchTip.title);
+//	var param = {
+//		name: "share-punch",
+//		title: common.langDatas.sharePunch.title,	
+//		leftIcon: "back",		//or "close" ，缺省即back
+//		backgroundColor: "#00ffffff"	//不设则默认白色
+//	}
+//	Shell.setPageTitle(JSON.stringify(param));
+	$('title').text(common.langDatas.sharePunch.title);
 	
 	common.ajaxFn({
 		url:`/api/shareInfo/userPunchShareInfo/${common.shareId}`,
@@ -113,29 +127,23 @@ function vmCreated(){
 			var datas =  res.data;
 			vm.checkShareData = datas;
 			
+			//根绝接口传入的语言加载语言包
+			if(datas.lan != common.currentLang && datas.lan){
+			   	common.langTag(datas.lan,function(result){
+					vm.langData = result;
+				});
+			}
+			
 		}
 	});
-
 }
-	
-//打卡查询
-function punchCheck(){
-	common.ajaxFn({
-		url:'/api/userPunch/detail',
-		success:(res) => {
-			var checkData = res.data;
-			checkData['studiedTimeMinute'] = parseInt(checkData.studiedTime/60);
-			vm.checkData = checkData;
-		}
-	});
-}	
 
 $(function(){
 	//获取用户id再执行函数
-	Shell.getSessionId(function(res){
-		common.sessionId = res;
-		common.vueIsLoad && vmCreated();
-	});
+//	Shell.getSessionId(function(res){
+//		common.sessionId = res;
+//		common.vueIsLoad && vmCreated();
+//	});
 	
 });
 </script>

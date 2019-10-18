@@ -48,27 +48,63 @@
 		"btnText":"去打卡"	//按钮文字
 	},
 	
-	//口语课程分享
-	shareSpoken:{
-		"title":"口语课",	//title
-		"pronounce":"发音",
-		"rhythm":"节奏",
-		"fluency":"流利度",
-		"accuracy":"正确率",
-		"headTypeText":"学习与闯关",
-		"headGetText":"获得了",
+	//分享页面一些共用的文字
+	"shareData":{
+		"headTitle":"CHIease",
+		"des":"以点起步，以线过渡，以面全面巩固",
+		"topBtn":"Download",
+		"topTitle":"CHIease",
+		"topDes":"懂汉语，你就是下一位封面人物",
+		"downloadAppleUrl":"https://apple.co/2W8O809",
+		"downloadGPUrl":"https://bit.ly/2YKVj0D",
+		"downloadMyappUrl":"https://bit.ly/2XSzfQp",
 		"challengeBtn" :"我要挑战",
+		"pronounce":"发音",
+		"fluency":"流畅度",
+		"intact":"完整度",
+		"accuracy":"正确率",
 		"bestTitle":"表现最佳的句子",
 		"recordText01":"我的录音",
 		"recordText02":"原音",
 		"scoreText":"分"
 	},
 	
+	//口语课分享
+	"shareSpoken":{
+		"title":"口语课",
+		"pronounce":"发音",
+		"intact":"完整度",
+		"fluency":"流畅度",
+		"accuracy":"正确率",
+		"headTypeText":"学习与闯关",
+		"headGetText":"获得了"
+	},
+	
 	//测试报告分享
-	shareReport:{
-		"title":"测试报告",	//title
-		"headTitle" :"你的朋友在CHIease测试汉语水平取得了Lv.3的好成绩～",
-		"challengeBtn" :"我要挑战",
+	"shareReport":{
+		"title":"测试报告",	
+		"headTitleText01" :"你的朋友在CHIease测试汉语水平取得了Lv.",
+		"headTitleText02" :"的好成绩～",
+		"reportTitleText":"WHAT YOU CAN DO",
+		"reportAdTitle":"IMPROVE PLAN",
+		"reportAdDes":"只有适合自己的学习方案，才能针对性的针对自己的弱点，获得高效提升"
+	},
+	
+	//配音课分享
+	"shareDub":{
+		"title":"配音课",	
+		"score_text01":"本段配音得分",
+		"score_text02":"超过了",
+		"score_text03":"的用户"
+	},
+	
+	//打卡分享
+	"sharePunch":{
+		"title":"打卡",	
+		"headText01":"你的朋友在CHIease已连续",
+		"headText02":"打卡",
+		"headText03":"天",
+		"punchBtnText":"我也要打卡"
 	}
 	
 	

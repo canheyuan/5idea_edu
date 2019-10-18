@@ -13,21 +13,59 @@ https://test.5ideachinese.com/profile/frontend/punch-target.html
 
 二、分享
 1、口语课分享
-https://test.5ideachinese.com/profile/frontend/share-spoken.html?shareid=14ac7340fcbea6d5bd99a7e5dc4c74b1
+https://test.5ideachinese.com/profile/frontend/share-spoken.html?shareid=b5c31a79257ffb3ac2c3af79377932f6
+file:///D:/Users/WXJY-TD-03/Desktop/五行前端代码/5idea-edu/share-spoken.html?test=1&shareid=b5c31a79257ffb3ac2c3af79377932f6
 
 2、配音课分享
 https://test.5ideachinese.com/profile/frontend/share-dub.html?shareid=91a32adb2e49ed0e9aecda013d8dd315
+file:///D:/Users/WXJY-TD-03/Desktop/五行前端代码/5idea-edu/share-dub.html?test=1&shareid=91a32adb2e49ed0e9aecda013d8dd315
+file:///D:/Users/WXJY-TD-03/Desktop/五行前端代码/5idea-edu/share-dub.html?test=1&shareid=6e016f3f111c352a85ecd069e360534a
 
 3、测试报告分享
 https://test.5ideachinese.com/profile/frontend/share-report.html?shareid=4dccdf22cfdbef27fb500ef3e9de2e1f
+file:///D:/Users/WXJY-TD-03/Desktop/五行前端代码/5idea-edu/share-report.html?test=1&shareid=4dccdf22cfdbef27fb500ef3e9de2e1f
 
 4、打卡分享页
 https://test.5ideachinese.com/profile/frontend/share-punch.html?shareid=fd086bee70fc4467aab3fce75c8266ad
+file:///D:/Users/WXJY-TD-03/Desktop/五行前端代码/5idea-edu/share-punch.html?test=1&shareid=fd086bee70fc4467aab3fce75c8266ad
 
-5、
-https://test.5ideachinese.com/profile/frontend/share-spoken.html
+5、定制课分享页
+file:///D:/Users/WXJY-TD-03/Desktop/五行前端代码/5idea-edu/share-custom.html?test=1&shareid=fd086bee70fc4467aab3fce75c8266ad
 
 
 三、其他
 1、拼音表
+file:///D:/Users/WXJY-TD-03/Desktop/五行前端代码/5idea-edu/pinyin-table.html
 https://test.5ideachinese.com/profile/frontend/pinyin-table.html
+
+2、测试题
+file:///D:/Users/WXJY-TD-03/Desktop/五行前端代码/5idea-edu/subject-custom.html?shareid=1
+https://test.5ideachinese.com/profile/frontend/subject-custom.html?shareid=1
+https://res.5ideachinese.com/frontend/subject-custom.html?shareid=1
+
+3、测试题结果页
+file:///D:/Users/WXJY-TD-03/Desktop/五行前端代码/5idea-edu/subject-result.html?shareid=1&level=2
+https://test.5ideachinese.com/profile/frontend/subject-result.html?shareid=1&level=2
+
+
+
+
+1、配音课、口语课、打卡分享页：完成度100%；
+2、测试报告分享： 完成度70%，待产品整理内容再进行优化
+3、定制课程分享：完成度40%，还未对接数据；
+4、定制课说明详情页：完成度90%，待接入APP测试；
+5、发现整个模块，完成度：0%，还没需求。
+
+
+
+
+
+
+
+
+Page[pages/wechat/chat/chat] not found.May be caused by:1.forgot to add page route in app.json.2.Invoking Page() in async task.
+
+
+
+
+

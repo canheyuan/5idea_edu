@@ -6,108 +6,114 @@
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
 <meta content="telephone=no" name="format-detection">
-<title>测试报告分享</title>
+<title></title>
 <link rel="stylesheet" href="static/css/reset.css">
 <link rel="stylesheet" href="static/css/share.css">
 <script src="static/js/conversion.750.js"></script>
 <script src="static/js/zepto.min.js" charset="utf-8"></script>
 <script src="static/js/vue.js" charset="utf-8"></script>
+<!--
 <script src="static/js/shell.js" charset="utf-8"></script>
 <script>
 Shell.init();
 </script>
+-->
 </head>
 
 <body class="gray_body">
 <div id="app" v-cloak>
 	
-
-
 <!--顶部提示下载-->
-<div class="share_top clearfix">
+<div :class="['share_top','clearfix',{download_show:downloadIsShow}]">
 	<div class="logo"><img src="static/images/logo.png" alt=""></div>
-	<a href="javascript:;" class="down_btn">Download</a>
+	<a :href="isIos?langData.shareData.downloadAppleUrl:'#download_mdl'" class="down_btn">
+		{{langData.shareData.topBtn}}
+	</a>
 	<div class="info">
-		<h3>CHIease</h3>
-		<p>懂汉语，你就是下一位封面人物两行样式</p>
+		<h3>{{langData.shareData.topTitle}}</h3>
+		<p>{{checkShareData.shareTitle}}</p>
 	</div>
-	<span class="close_btn"><i class="icons"></i></span>
+	<span class="close_btn" @click="closeDownloadFn"><i class="icons"></i></span>
 </div>
 	
 <!--测试报告头部-->
 <div class="report_head">
 	<div class="report_top">
-		<div class="title">你的朋友在CHIease测试汉语水平取得了Lv.{{checkShareData.level}}的好成绩～</div>
+		<div class="title">
+			{{langData.shareReport.headTitleText01}}
+			{{checkShareData.level}}
+			{{langData.shareReport.headTitleText02}}
+		</div>
 		<div class="report_progress">
 		
 			<div class="progress" id="indicatorContainer"></div>
 			<div class="progress_data">
 				<p>Your level</p>
 				<h3>Lv.{{checkShareData.level}}</h3>
-				<a href="javascript:;" class="btn">我要挑战</a>
+				<a :href="isIos?langData.shareData.downloadAppleUrl:'#download_mdl'"  class="btn">
+					{{langData.shareData.challengeBtn}}
+				</a>
 			</div>
 			
 		</div>
 	</div>
 	
-	<div class="report_data" v-if="reportData.length!=0">
-		<div class="report_title"><i class="icons ico_report"></i>WHAT YOU CAN DO</div>
-		<ul class="report_list">
+	<div class="report_data" v-if="checkShareData.adviceList">
+		<div class="report_title">
+			<i class="icons ico_report"></i>
+			{{langData.shareReport.reportTitleText}}
+		</div>
+		<ul class="report_list" v-if="reportData.length>0">
+			<li class="act" v-for="item in checkShareData.adviceList">
+				<span class="cir"><i class="icons"></i></span>
+				<p>{{reportData[item-1][currentLang]}}</p>
+			</li>
+			
+<!--
 			<li class="act" v-for="item in reportData">
 				<span class="cir"><i class="icons"></i></span>
 				<p>{{item[currentLang]}}</p>
-			</li>
-<!--
-			<li class="act">
-				<span class="cir"><i class="icons"></i></span>
-				<p>测试长度因人而异，厉害的才能测完全部3个部分</p>
-			</li>
-			<li>
-				<span class="cir"><i class="icons"></i></span>
-				<p>只有一次中途退出的机会</p>
-			</li>
-			<li>
-				<span class="cir"><i class="icons"></i></span>
-				<p>Phone销量下滑的幅度超出了预期</p>
-			</li>
-			<li>
-				<span class="cir"><i class="icons"></i></span>
-				<p>来自供应链的许多警告信号表明</p>
-			</li>
-			<li>
-				<span class="cir"><i class="icons"></i></span>
-				<p>但是，情况比我们想象的更糟</p>
 			</li>
 -->
 		</ul>
 	</div>
 </div>
 	
-<div class="report_ad" style="background:url(static/images/share_ad01.png) no-repeat; background-size:100% auto;">
-	<h3>IMPROVE PLAN</h3>
-	<p>只有适合自己的学习方案，才能针对性的针对自己的弱点，获得高效提升</p>
+<div 
+	class="report_ad" 
+	style="background:url(static/images/share_banner01.png) no-repeat; background-size:100% auto;"
+>
+	<h3>{{langData.shareReport.reportAdTitle}}</h3>
+	<p>{{langData.shareReport.reportAdDes}}</p>
 </div>
 	
 
 <!--下载-->
-<div class="download_mdl">
+<div class="download_mdl" id="download_mdl">
 	<div class="down_head">
 		<div class="title">
-			<h3>CHIease | 听说读写</h3>
-			<p>以点起步，以线过渡，以面全面巩固</p>
+			<h3>{{langData.shareData.headTitle}}</h3>
+			<p>{{checkShareData.shareDesc}}</p>
 		</div>
 		<img class="head_img" src="static/images/share_img01.jpg" alt="">
+		<img class="down_tit" src="static/images/down_head.png" alt="" >
 	</div>
-	<div class="down_btns">
-		<a class="apply_btn" href="javascript:;">
-			<i class="icons ico_apply"></i>
+	<div class="down_btns"  v-if="isAndroid || isPc">
+		<a :href="langData.shareData.downloadAppleUrl" v-if="isPc">
+			<img src="static/images/downbtn01.png" alt="">
+		</a>
+		<a :href="langData.shareData.downloadGPUrl">
+			<img src="static/images/downbtn02.png" alt="">
+		</a>
+		<a :href="langData.shareData.downloadMyappUrl">
+			<img src="static/images/downbtn03.png" alt="">
+		</a>
+	</div>
+	<div class="down_btns2" v-if="isIos">
+		<a class="apply_btn" :href="langData.shareData.downloadAppleUrl">
+			<i class="icons"></i>
 			<h4>Download</h4>
 			<p>on the App Store</p>
-		</a>
-		<a class="android_btn" href="javascript:;">
-			<i class="icons ico_android"></i>
-			<h4>Download</h4>
-			<p>on the Google Play</p>
 		</a>
 	</div>
 </div>
@@ -122,15 +128,15 @@ Shell.init();
 //vue实例加载完后执行的函数
 function vmCreated(){
 
-	//设置页面标题栏
-	var param = {
-		name: "share-report",
-		title: '测试报告',	
-		leftIcon: "back",		//or "close" ，缺省即back
-		backgroundColor: "#00ffffff"	//不设则默认白色
-	}
-	Shell.setPageTitle(JSON.stringify(param));
-	$('title').text('测试报告');
+//	//设置页面标题栏
+//	var param = {
+//		name: "share-report",
+//		title: common.langDatas.shareReport.title,	
+//		leftIcon: "back",		//or "close" ，缺省即back
+//		backgroundColor: "#00ffffff"	//不设则默认白色
+//	}
+//	Shell.setPageTitle(JSON.stringify(param));
+	$('title').text(common.langDatas.shareReport.title);
 	
 	var radialObj = radialIndicator('#indicatorContainer', {
 		barColor: '#ffffff',
@@ -143,15 +149,19 @@ function vmCreated(){
 		percentage: true
 	});
 	
-	
-	
-	
 	common.ajaxFn({
 		url:`/api/shareInfo/userExamShareInfo/${common.shareId}`,
 		success:(res)=>{
 			var datas =  res.data;
 			vm.checkShareData = datas;
 			radialObj.animate(parseInt(100*datas.level/6));
+			
+			//根绝接口传入的语言加载语言包
+			if(datas.lan != common.currentLang && datas.lan ){
+			   	common.langTag(datas.lan,function(result){
+					vm.langData = result;
+				});
+			}
 			
 			$.ajax({
 				url:`static/json/report.json`,
@@ -160,21 +170,21 @@ function vmCreated(){
 				success:(res)=>{
 					console.log(res);
 					vm.reportData = res[datas.level-1].content;
+					
 				},
 			});
 		}
 	});
-	
 
 }
 
 
 $(function(){
 	//获取用户id再执行函数
-	Shell.getSessionId(function(res){
-		common.sessionId = res;
-		common.vueIsLoad && vmCreated();
-	});
+//	Shell.getSessionId(function(res){
+//		common.sessionId = res;
+//		common.vueIsLoad && vmCreated();
+//	});
 	
 });
 </script>

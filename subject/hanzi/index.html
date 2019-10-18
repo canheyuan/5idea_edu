@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0" />
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<script src="js/conversion.750.js"></script>
+<title>中国汉字起源及演变</title>
+</head>
+<body>
+<style>
+	body{max-width:750px; margin:0 auto;}
+	*{padding:0; margin:0;}
+	.main{font-size:0;width:100%; position:relative;}
+	.main img{width:100%;}
+	.down_btn{position:fixed; bottom:10px; left:50%; width:.8rem; margin-left:-.4rem; opacity: 1;  transition:opacity .5s;}
+	.download_btn{position:fixed; bottom:20px; left:50%; width:5rem; margin-left:-2.5rem; opacity: 0; transition:opacity .5s;}
+	.down_btn img,
+	.download_btn img{width:100%;}
+	.download_btn.bottom{position:absolute; bottom:2rem;}
+	#bottom{ position:absolute; left:0; bottom:120px; z-index:99;}
+</style>
+	
+<div class="main">
+	<img src="images/img01.jpg" alt="">	
+	<img src="images/img02.jpg" alt="">	
+	<img src="images/img03.jpg" alt="">	
+	<img src="images/img04.jpg" alt="">	
+	<img src="images/img05.jpg" alt="">	
+	<img src="images/img06.jpg" alt="">	
+	<img src="images/img07.jpg" alt="">	
+	<img src="images/img08.jpg" alt="">	
+	<img src="images/img09.jpg" alt="">	
+	<img src="images/img10.jpg" alt="">	
+	<img src="images/img11.jpg" alt="">
+	<div id="bottom"></div>
+	<div class="down_btn" id="down_btn"><img src="images/down_btn.png" alt=""></div>
+	<a class="download_btn" id="download_btn" href="#"><img src="images/download_btn.png" alt=""></a>
+</div>
+
+	
+<script src="js/zepto.min.js" charset="utf-8"></script>
+<script>
+	
+//判断手机系统
+function isSystem(){
+	var u = navigator.userAgent;
+	var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+	var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+	var resultTxt = '';
+	if(isAndroid){
+		resultTxt = 'android';
+	}else if(isiOS){
+		resultTxt = 'ios';
+	}
+	return resultTxt;
+}
+	
+//获取手机系统语言
+function getSystemLang(){
+	var language = (navigator.appName == 'Netscape') ? navigator.language : navigator.browserLanguage;
+	language = language?language:'en';
+	var result;
+	if(language.indexOf('zh') > -1){result = 'zh';}	//中国
+//	else if(language.indexOf('ar') > -1){result = 'ar';}	//阿拉伯
+//	else if(language.indexOf('ja') > -1){result = 'ja';}	//日本
+//	else if(language.indexOf('ko') > -1){result = 'ko';}	//韩国
+//	else if(language.indexOf('de') > -1){result = 'de';}	//德国
+//	else if(language.indexOf('es') > -1){result = 'es';}	//西班牙
+//	else if(language.indexOf('fr') > -1){result = 'fr';}	//法国
+//	else if(language.indexOf('ru') > -1){result = 'ru';}	//俄罗斯
+	//其他语音一个一个列出来
+	else{result = 'en';}
+	return result;
+}
+
+window.onload =function(){
+	var downloadUrl = '';
+	if(isSystem()=='ios'){
+	   downloadUrl = 'https://itunes.apple.com/cn/app/chiease/id1454486250?ls=1&mt=8';
+	}else if(getSystemLang()=='zh'){
+		 downloadUrl = 'https://sj.qq.com/myapp/detail.htm?apkName=com.fiveidea.chiease';
+	}else{
+		 downloadUrl = 'https://play.google.com/store/apps/details?id=com.fiveidea.chiease';
+	}
+	$('#download_btn').attr('href', downloadUrl);
+	
+	var bottomTop = $('#bottom').offset().top - $(window).height() + 30;
+	console.log('bottomTop',bottomTop);
+	$(window).scroll(function(){
+		var sTop = $(window).scrollTop();
+		if(sTop > 400){
+		   	$('#down_btn').css('opacity',0);
+		}
+		if(sTop > 800){
+		   	$('#download_btn').css('opacity',1);
+		}
+		
+		if(sTop > bottomTop){
+		   	$('#download_btn').addClass('bottom')
+		}else{
+			$('#download_btn').removeClass('bottom')
+		}
+	})
+}
+</script>
+	
+</body>
+</html>
+
+
+
+
+
+
+

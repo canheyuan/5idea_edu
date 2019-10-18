@@ -12,25 +12,28 @@
 <script src="static/js/conversion.750.js"></script>
 <script src="static/js/zepto.min.js" charset="utf-8"></script>
 <script src="static/js/vue.js" charset="utf-8"></script>
+<!--
 <script src="static/js/shell.js" charset="utf-8"></script>
 <script>
 Shell.init();
 </script>
+-->
 </head>
 
 <body class="gray_body">
 <div id="app" v-cloak>
 
-
 <!--顶部提示下载-->
-<div class="share_top clearfix">
+<div :class="['share_top','clearfix',{download_show:downloadIsShow}]">
 	<div class="logo"><img src="static/images/logo.png" alt=""></div>
-	<a href="javascript:;" class="down_btn">Download</a>
+	<a :href="isIos?langData.shareData.downloadAppleUrl:'#download_mdl'" class="down_btn">
+		{{langData.shareData.topBtn}}
+	</a>
 	<div class="info">
-		<h3>CHIease</h3>
-		<p>懂汉语，你就是下一位封面人物两行样式</p>
+		<h3>{{langData.shareData.topTitle}}</h3>
+		<p>{{checkShareData.shareTitle}}</p>
 	</div>
-	<span class="close_btn"><i class="icons"></i></span>
+	<span class="close_btn" @click="closeDownloadFn"><i class="icons"></i></span>
 </div>
 	
 <!--配音课头部-->
@@ -38,20 +41,40 @@ Shell.init();
 	<div class="dub_video">
 		<div class="title" id="videoTitle">{{checkShareData.chapterName.zh}}</div>
 		<video id="video" :src="checkShareData.video" muted="true"  x5-video-player-type="h5" playsinline webkit-playsinline="true"></video>
+		<audio id="userAudio" style="display:none;" :src="checkShareData.userAudio"></audio>
 		<img class="play_btn" id="playBtn" src="static/images/ico_play.png" alt="">
 	</div>
 	<div class="share_score">
 	  	<div class="score_top">
-			<p class="txt">本段配音得分<br>超过了<span>{{checkShareData.accuracyScore}}%</span>的用户</p>
+			<p class="txt">
+				{{langData.shareDub.score_text01}}<br>
+				{{langData.shareDub.score_text02}}
+				<span>{{checkShareData.accuracyScore}}%</span>
+				{{langData.shareDub.score_text03}}
+			</p>
 			<div class="score_num">{{checkShareData.score}}</div>
-			<a class="btn" href="javascript:;">我要挑战</a>
+			<a class="btn" :href="isIos?langData.shareData.downloadAppleUrl:'#download_mdl'">
+				{{langData.shareData.challengeBtn}}
+			</a>
 		</div>
 		<div class="score_box">
 			<ul class="score_list clearfix">
-				<li class="yellow"><span>{{checkShareData.rhythmScore}}</span><p>发音</p></li>
-				<li class="green"><span>{{checkShareData.fluencyScore}}</span><p>流畅度</p></li>
-				<li class="blue"><span>{{checkShareData.integrityScore}}</span><p>完整度</p></li>
-				<li class="red"><span>{{checkShareData.accuracyScore}}</span><p>正确率</p></li>
+				<li class="yellow">
+					<span>{{checkShareData.rhythmScore}}</span>
+					<p>{{langData.shareData.pronounce}}</p>
+				</li>
+				<li class="green">
+					<span>{{checkShareData.fluencyScore}}</span>
+					<p>{{langData.shareData.fluency}}</p>
+				</li>
+				<li class="blue">
+					<span>{{checkShareData.integrityScore}}</span>
+					<p>{{langData.shareData.intact}}</p>
+				</li>
+				<li class="red">
+					<span>{{checkShareData.accuracyScore}}</span>
+					<p>{{langData.shareData.accuracy}}</p>
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -59,7 +82,7 @@ Shell.init();
 
 <!--录音列表-->
 <div class="share_record">
-	<div class="record_title"><i class="icons ico_zan"></i>表现最佳的句子</div>
+	<div class="record_title"><i class="icons ico_zan"></i>{{langData.shareData.bestTitle}}</div>
 	<div class="record_list">
 		
 		<div class="record_item" v-for="(item,index) in checkShareData.paraList">
@@ -71,7 +94,9 @@ Shell.init();
 						<div class="mask"></div>
 						<i :class="item.isUserPlay?'icons ico_stop':'icons ico_play'"></i>
 					</div>
-					<div class="text">我的录音 - <span class="orange">{{item.score}}分</span></div>
+					<div class="text">
+						{{langData.shareData.recordText01}} - <span class="orange">{{item.score}}{{langData.shareData.scoreText}}</span>
+					</div>
 					
 				</li>
 				<li>
@@ -79,57 +104,42 @@ Shell.init();
 						<i :class="item.isParaPlay?'icons ico_stop':'icons ico_play'"></i>
 						<div class="progress"></div>
 					</div>
-					<div class="text">原音</div>
+					<div class="text">{{langData.shareData.recordText02}}</div>
 				</li>
 			</ul>
 		</div>
-		<audio id="spokenAudio" class="audio" :src="shareMediaUrl"></audio>
 		
-<!--
-		<div class="record_item">
-			<h4 class="tit"><span class="blue">如果我了解更多中国的文化</span>就好了，<span class="blue">我想看《金瓶梅》</span>没文化会看不懂的，嚎~</h4>
-			<ul class="audio_list">
-				<li>
-					<div class="play_box">
-						<img src="static/images/per_img.jpg" alt="">
-						<div class="mask"></div>
-						<i class="icons ico_play"></i>
-					</div>
-					<div class="text">我的录音 - <span class="orange">90分</span></div>
-				</li>
-				<li>
-					<div class="play_box">
-						<i class="icons ico_play"></i>
-						<div class="progress"></div>
-					</div>
-					<div class="text">原音</div>
-				</li>
-			</ul>
-		</div>
--->
+		<audio id="spokenAudio" class="audio" :src="shareMediaUrl"></audio>
 		
 	</div>
 </div>
 
 <!--下载-->
-<div class="download_mdl">
+<div class="download_mdl" id="download_mdl">
 	<div class="down_head">
 		<div class="title">
-			<h3>CHIease | 听说读写</h3>
-			<p>以点起步，以线过渡，以面全面巩固</p>
+			<h3>{{langData.shareData.headTitle}}</h3>
+			<p>{{checkShareData.shareDesc}}</p>
 		</div>
 		<img class="head_img" src="static/images/share_img01.jpg" alt="">
+		<img class="down_tit" src="static/images/down_head.png" alt="" >
 	</div>
-	<div class="down_btns">
-		<a class="apply_btn" href="javascript:;">
-			<i class="icons ico_apply"></i>
+	<div class="down_btns"  v-if="isAndroid || isPc">
+		<a :href="langData.shareData.downloadAppleUrl" v-if="isPc">
+			<img src="static/images/downbtn01.png" alt="">
+		</a>
+		<a :href="langData.shareData.downloadGPUrl">
+			<img src="static/images/downbtn02.png" alt="">
+		</a>
+		<a :href="langData.shareData.downloadMyappUrl">
+			<img src="static/images/downbtn03.png" alt="">
+		</a>
+	</div>
+	<div class="down_btns2" v-if="isIos">
+		<a class="apply_btn" :href="langData.shareData.downloadAppleUrl">
+			<i class="icons"></i>
 			<h4>Download</h4>
 			<p>on the App Store</p>
-		</a>
-		<a class="android_btn" href="javascript:;">
-			<i class="icons ico_android"></i>
-			<h4>Download</h4>
-			<p>on the Google Play</p>
 		</a>
 	</div>
 </div>
@@ -141,26 +151,35 @@ Shell.init();
 	
 //vue实例加载完后执行的函数
 function vmCreated(){
-
+	
 	//设置页面标题栏
-	var param = {
-		name: "share-spoken",
-		title: '配音课分享',	
-		leftIcon: "back",		//or "close" ，缺省即back
-		backgroundColor: "#00ffffff"	//不设则默认白色
-	}
-	Shell.setPageTitle(JSON.stringify(param));
-	$('title').text('配音课分享');
+//	var param = {
+//		name: "share-dub",
+//		title: common.langDatas.shareDub.title,	
+//		leftIcon: "back",		//or "close" ，缺省即back
+//		backgroundColor: "#00ffffff"	//不设则默认白色
+//	}
+//	Shell.setPageTitle(JSON.stringify(param));
+	$('title').text(common.langDatas.shareDub.title);
 	
 	common.ajaxFn({
 		url:`/api/shareInfo/dubChaShareInfo/${common.shareId}`,
 		success:(res)=>{
 			var datas =  res.data;
-			datas.paraList.forEach(item=>{
-				item.isUserPlay = false;
-				item.isParaPlay = false;
-			});
+			if(datas.paraList){
+				datas.paraList.forEach(item=>{
+					item.isUserPlay = false;
+					item.isParaPlay = false;
+				});
+			}
 			vm.checkShareData = datas;
+			
+			//根绝接口传入的语言加载语言包
+			if(datas.lan != common.currentLang && datas.lan){
+			   	common.langTag(datas.lan,function(result){
+					vm.langData = result;
+				});
+			}
 			
 			//给ul父级设置个宽度
 			var ul_width = 5;
@@ -173,20 +192,27 @@ function vmCreated(){
 
 			//视频播放
 			var videoObj = $('#video').get(0);
+			var audioObj = $('#userAudio').get(0);
 			$('#playBtn').on('click',function(){
 				videoObj.play();
+				audioObj.play();
 			});
 
 			$('#video').on('click',function(){
-				 if(videoObj.paused){ //如果已暂停则播放
+				var spokenAudio = $('#spokenAudio').get(0);
+				spokenAudio.pause();
+				if(videoObj.paused){ //如果已暂停则播放
 					videoObj.play(); //播放控制
+					audioObj.play();
 				}else{ // 已播放点击则暂停
 					videoObj.pause(); //暂停控制
+					audioObj.pause();
 				}
 			});
 			
 			//监听视频播放触发
 			videoObj.addEventListener("play",function(){
+				
 				$('#playBtn').hide();
 				$('#videoTitle').hide();
 			},false);
@@ -213,10 +239,10 @@ function vmCreated(){
 $(function(){
 	
 	//获取用户id再执行函数
-	Shell.getSessionId(function(res){
-		common.sessionId = res;
-		common.vueIsLoad && vmCreated && vmCreated();
-	});
+//	Shell.getSessionId(function(res){
+//		common.sessionId = res;
+//		common.vueIsLoad && vmCreated && vmCreated();
+//	});
 	
 });
 </script>

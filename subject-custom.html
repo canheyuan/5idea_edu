@@ -12,7 +12,7 @@
 <script src="static/js/conversion.750.js"></script>
 <script src="static/js/zepto.min.js" charset="utf-8"></script>
 <script src="static/js/vue.js" charset="utf-8"></script>
-<script src="static/js/shell.js" charset="utf-8"></script>
+<!--<script src="static/js/shell.js" charset="utf-8"></script>-->
 </head>
 
 <body class="subject_bg">
@@ -24,13 +24,7 @@
 			<div class="start_pop">
 				<img class="top_img" src="static/images/start_bg.png" alt="">
 				<h3>Chinese Proficiency Test</h3>
-				<p>ccurate Testing, Exact Point<br>
-				Listening Speaking Reading Vocabulary<br>
-				Grammar<br>
-				Catch all in one draft<br>
-				Make smooth learning<br>
-				Here you are, professional test!<br>
-				Here you go, scientific teaching!</p>
+				<p>Accurate Testing<br>Here you are,professional test!<br>Here you go,scientific teaching!</p>
 				<a href="javascript:;" @click="startSubject">Start Test</a>
 			</div>
 		</div>
@@ -41,7 +35,7 @@
 		<div class="mask_bg_ctn">
 			<div class="subject_mask_btn">
 				<a href="javascript:;" @click="pauseSubject">继续答题</a>
-<!--				<a href="javascript:;">重新开始</a>-->
+				<!--<a href="javascript:;">重新开始</a>-->
 				<a href="javascript:;">退出</a>
 			</div>
 		</div>
@@ -50,8 +44,9 @@
 	<!--测试题头部-->
 	<div class="subject_head" v-if="subjectItem">
 		<div class="progress" id="progress" :style="{width:(subjectIndex+1)/5*100+'%'}"></div>
-		<div class="play_btn" @click="pauseSubject">
-			<i class="icons ico_pause"></i>
+		<!--		<div class="play_btn" @click="pauseSubject">-->
+		<div class="play_btn">
+<!--			<i class="icons ico_pause"></i>-->
 			<div class="cirqueBox">
 				<div class="cirqueYellow"></div>
 				<div 
@@ -60,10 +55,12 @@
 				></div>
 			</div>
 		</div>
+<!--
 		<div class="right_txt">
 			<i class="icons ico_tip"></i>
 			<span>提示</span>
 		</div>
+-->
 		<div class="txt_jf">
 			<span class="">{{subjectIndex+1}}</span>/5
 		</div>
@@ -84,8 +81,8 @@
 					<div class="mask"><i class="ico_gou"></i></div>
 				</li>
 			</ul>
-			<div class="tyxt_answer">{{subjectItem.title}}</div>
-			<div class="audio_btn audio_btm" @click="subjectPlayAudio(subjectItem.audio)">
+<!--			<div class="tyxt_answer">{{subjectItem.title}}</div>-->
+			<div class="audio_btn audio_btm" @click="subjectPlayAudio(subjectItem.audio,$event)">
 				<img src="static/images/ico_audio.png" alt="">
 			</div>
 		</div>
@@ -94,7 +91,7 @@
 		<div class="subject_item"  v-if="subjectItem.questionType==4">
 			<div class="tyxz_img"><img :src="subjectItem.img" alt=""></div>
 			<div class="tyxt_answer">{{subjectItem.content}}</div>
-			<div class="audio_btn audio_center" @click="subjectPlayAudio(subjectItem.audio)">
+			<div class="audio_btn audio_center" @click="subjectPlayAudio(subjectItem.audio,$event)">
 				<img src="static/images/ico_audio.png" alt="">
 			</div>
 			<ul class="answer_btn01">
@@ -127,7 +124,7 @@
 
 			<div 
 				class="audio_btn audio_center" 
-				@click="subjectPlayAudio(subjectItem.audio,subjectIndex)"
+				@click="subjectPlayAudio(subjectItem.audio,$event)"
 			>
 				<img src="static/images/ico_audio.png" alt="">
 			</div>
@@ -149,7 +146,7 @@
 			<div class="tyxz_img"><img :src="subjectItem.img" alt=""></div>
 			<div 
 				 class="audio_btn audio_center" 
-				 @click="subjectPlayAudio(subjectItem.audioList,subjectIndex)"
+				 @click="subjectPlayAudio(subjectItem.audioList,$event)"
 			>
 				<img src="static/images/ico_audio.png" alt="">
 			</div>
@@ -170,7 +167,7 @@
 			<div class="tyxz_img"><img :src="subjectItem.img" alt=""></div>
 			<div 
 				 class="audio_btn audio_center" 
-				 @click="subjectPlayAudio(subjectItem.audio,subjectIndex)"
+				 @click="subjectPlayAudio(subjectItem.audio,$event)"
 			>
 				<img src="static/images/ico_audio.png" alt="">
 			</div>
@@ -190,18 +187,15 @@
 			</ul>
 			<div 
 				class="submit_btn"
-				@click="affirmAnswer()"
+				@click="affirmAnswer(subjectItem.answerArr.join(','))"
 			>Submit</div>
 		</div>
-		
 		
 	</div>
 	
 	<audio :src="currentAudioUrl" id="subjectPlayAudio"></audio>
 	
 </div>
-
-
 	
 <!--判断题-->
 <div class="subject_mdl" style="padding-top:2.5rem; display:none;">
@@ -212,84 +206,181 @@
 		<li><span>不是<i class="icons ico_gou"></i></span></li>
 	</ul>
 </div>
+	
+	
+<script src="static/json/question-list.js"></script>
 <script src="static/js/common.js"></script>
 <script>
-
+var tjData = {};
+var tjDataStr = localStorage.getItem('tjData');
+if(tjDataStr){
+	tjData = JSON.parse(tjDataStr)
+}else{
+	tjData = {
+		shareid:'758e1e43956b23aa174f26358111b086',
+		uniqueNums:''
+	}
+}
 //vue实例加载完后执行的函数
 function vmCreated(){
-	
+	getStatisticsData(tjData.shareid,tjData.uniqueNums);
 	getSubjectFn();
-
 }
 
+//初次进入测试题获取信息
+function getStatisticsData(shareid,uniqueNums){
+	common.ajaxFn({
+		url:`/api/shareInfo/access/${shareid}`,
+		data:{
+			uniqueNums : uniqueNums
+		},
+		success:(res) => {
+			console.log('测试题初次加载：',res)
+			tjData['uniqueNums'] = res.data.uniqueNums;
+			vm.tjData = tjData;
+			localStorage.setItem("tjData", JSON.stringify(tjData));
+		}
+	})
+}
 	
 //加载题目数据,题目类型：1 听音选图、2 看图跟读、3 看图选择、4 选择填空、5 完形填空、6 听音选音、7 选择排序
 function getSubjectFn(){
-	common.ajaxFn({
-		url:'/api/question/random-list',
-		data:{
-			levelCount:'{1:5,2:5,3:5}',
-			//types:'[1,4,5,6,7]'
-			types:'[6,7]',
-		},
-		success:(res) => {
-			console.log('测试题目：',res);
-			var subjectData = res;
-			subjectData.currentAudioUrl = '';
-			subjectData.currentIndex = 0;
-			subjectData.level1  = [];
-			subjectData.level2 = [];
-			subjectData.level3 = [];
-			subjectData.data.forEach(item =>{
-				
-				//类型5表示完型填空题
-				if(item.questionType == 5){
-					//替换题目中的横线
-					item.contentArr = item.content.split('____').map(item2=>{
-						return {val:item2,answerIndex:''}
-					});
-					item.contentNum = 0;	//记录当前题目中有几个答案了
-				}
-				
-				//听音选音
-				var audioList = item.audio;
-				if(item.questionType == 6){
-				   //听音选音,把题目和答案声音的链接通过逗号连在一起
-					item.options.forEach(item2=>{
-						if(item2.audio){
-						   	item.isPlayAudio = false;
-							audioList += ',' + item2.audio;
-						}
-					})
-				}
-				item.audioList = audioList;
-				
-				//选择排序
-				if(item.questionType == 7){
-				   	item.answerArr = [];
-					item.contentNum = 0;	//记录当前题目中有几个答案了
-				}
-				
-				switch(item.level){
-					case 1:
-						subjectData.level1.push(item);
-						break;
-					case 2:
-						subjectData.level2.push(item);
-						break;
-					case 3:
-						subjectData.level3.push(item);
-						break;
-				}
-				
+	
+	var subjectData = subjectListData;
+	subjectData.currentAudioUrl = '';
+	subjectData.currentIndex = 0;
+	subjectData.level1  = [];
+	subjectData.level2 = [];
+	subjectData.level3 = [];
+	function randomsort(a, b) {
+		return Math.random()>.5 ? -1 : 1;
+		//用Math.random()函数生成0~1之间的随机数与0.5比较，返回-1或1，从而达到重新排列数组
+	}
+	subjectData.data.forEach(item =>{
+
+		//类型5表示完型填空题
+		if(item.questionType == 5){
+			//替换题目中的横线
+			item.contentArr = item.content.split('____').map(item2=>{
+				return {val:item2,answerIndex:''}
 			});
-			console.log('level1:',subjectData.level1);
-			console.log('level2:',subjectData.level2);
-			console.log('level3:',subjectData.level3);
-			vm.subjectData = subjectData;
-			
+			item.contentNum = 0;	//记录当前题目中有几个答案了
 		}
+
+		//听音选音
+		var audioList = item.audio;
+		if(item.questionType == 6){
+		   //听音选音,把题目和答案声音的链接通过逗号连在一起
+			item.options.forEach(item2=>{
+				if(item2.audio){
+					item.isPlayAudio = false;
+					audioList += ',' + item2.audio;
+				}
+			})
+		}
+		item.audioList = audioList;
+
+		//选择排序
+		if(item.questionType == 7){
+			item.answerArr = [];
+			item.contentNum = 0;	//记录当前题目中有几个答案了
+		}
+
+		//选项顺序打乱
+		if(item.questionType == 5 || item.questionType == 7){
+			item.options.sort(randomsort);   
+		}
+
+		switch(item.level){
+			case 1:
+				subjectData.level1.push(item);
+				break;
+			case 2:
+				subjectData.level2.push(item);
+				break;
+			case 3:
+				subjectData.level3.push(item);
+				break;
+		}
+
 	});
+	setTimeout(()=>{
+		vm.subjectData = subjectData;
+	},300)
+	
+	
+	
+//	common.ajaxFn({
+//		url:'/api/question/random-list',
+//		data:{
+//			levelCount:'{1:5,2:5,3:5}',	//加载的题目等级：数量
+//			types:'[1,4,5,6,7]'		//加载题目的类型
+//			//types:'[5]'
+//		},
+//		success:(res) => {
+//			console.log('测试题目：',res);
+//			var subjectData = res;
+//			subjectData.currentAudioUrl = '';
+//			subjectData.currentIndex = 0;
+//			subjectData.level1  = [];
+//			subjectData.level2 = [];
+//			subjectData.level3 = [];
+//			function randomsort(a, b) {
+//				return Math.random()>.5 ? -1 : 1;
+//				//用Math.random()函数生成0~1之间的随机数与0.5比较，返回-1或1，从而达到重新排列数组
+//			}
+//			subjectData.data.forEach(item =>{
+//				
+//				//类型5表示完型填空题
+//				if(item.questionType == 5){
+//					//替换题目中的横线
+//					item.contentArr = item.content.split('____').map(item2=>{
+//						return {val:item2,answerIndex:''}
+//					});
+//					item.contentNum = 0;	//记录当前题目中有几个答案了
+//				}
+//				
+//				//听音选音
+//				var audioList = item.audio;
+//				if(item.questionType == 6){
+//				   //听音选音,把题目和答案声音的链接通过逗号连在一起
+//					item.options.forEach(item2=>{
+//						if(item2.audio){
+//						   	item.isPlayAudio = false;
+//							audioList += ',' + item2.audio;
+//						}
+//					})
+//				}
+//				item.audioList = audioList;
+//				
+//				//选择排序
+//				if(item.questionType == 7){
+//				   	item.answerArr = [];
+//					item.contentNum = 0;	//记录当前题目中有几个答案了
+//				}
+//				
+//				//选项顺序打乱
+//				if(item.questionType == 5 || item.questionType == 7){
+//					item.options.sort(randomsort);   
+//				}
+//				
+//				switch(item.level){
+//					case 1:
+//						subjectData.level1.push(item);
+//						break;
+//					case 2:
+//						subjectData.level2.push(item);
+//						break;
+//					case 3:
+//						subjectData.level3.push(item);
+//						break;
+//				}
+//				
+//			});
+//			vm.subjectData = subjectData;
+//			
+//		}
+//	});
 }	
 
 $(function(){

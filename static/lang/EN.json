@@ -39,5 +39,79 @@
 		"continuousPunch":"Clocked",
 		"dayText":"days",
 		"btnText":"Go clock"
+	},
+	"shareData":{
+		"headTitle":"CHIease",
+		"topBtn":"Download",
+		"topTitle":"CHIease",
+		"downloadAppleUrl":"https://itunes.apple.com/cn/app/chiease/id1454486250?ls=1&mt=8",
+		"downloadGPUrl":"https://play.google.com/store/apps/details?id=com.fiveidea.chiease",
+		"downloadMyappUrl":"https://sj.qq.com/myapp/detail.htm?apkName=com.fiveidea.chiease",
+		"challengeBtn" :"Challenge",
+		"pronounce":"Pronounce",
+		"fluency":"Fluency",
+		"intact":"Integrity",
+		"accuracy":"Accuracy",
+		"bestTitle":"Best performance",
+		"recordText01":"My record",
+		"recordText02":"Original",
+		"scoreText":""
+	},
+	
+	"shareSpoken":{
+		"title":"Speaking",
+		"pronounce":"Pronounce",
+		"intact":"Integrity",
+		"fluency":"Fluency",
+		"accuracy":"Accuracy",
+		"headTypeText":"Study and Challenge",
+		"headGetText":"Gained"
+	},
+	
+	"shareReport":{
+		"title":"Report",	
+		"headTitleText01" :"Your friend got Lv",
+		"headTitleText02" :"in Chinese test of CHIease.",
+		"reportTitleText":"WHAT YOU CAN DO",
+		"reportAdTitle":"IMPROVE PLAN",
+		"reportAdDes":"Only the learning plan that suits you can be targeted to your own weaknesses and gain effective improvement."
+	},
+	
+	"shareDub":{
+		"title":"Dubbing",	
+		"score_text01":"Score of this paragraph",
+		"score_text02":"is better than",
+		"score_text03":"learners"
+	},
+	
+	"sharePunch":{
+		"title":"Clock",	
+		"headText01":"Your friends learnt steadily in CHIease",
+		"headText02":"and clocked",
+		"headText03":"days",
+		"punchBtnText":"I want to try"
+	},
+	
+	"shareCustom":{
+		"title":"Specific",	
+		"headText01":"Your friends learnt naturally in CHIease",
+		"headText02":"and got",
+		"headText03":"points excellently",
+		"coin":"coins",
+		"totalCoinText":"Obtained",
+		"rightTitle":"Perfect answer",
+		"initiativeTitle":"Active Record"
+	},
+	
+	"subjectResult":{
+		"title":"Test Report",
+		"downloadBtn":"View details in App",
+		"reportTitleText":"WHAT YOU CAN DO",
+		"reportDes":"Use clear and standard Chinese to describe the basic points of common topic at work.",
+		"reportDes2":"Download App to complete suitable Chinese proficiency test and gain entire report to improve employability.",
+		"popTitle":"Please select download",
+		"closeBtnText":"Cancel"
 	}
+	
+	
 }

@@ -39,5 +39,79 @@
 		"continuousPunch":"已连续打卡",
 		"dayText":"天",
 		"btnText":"去打卡"
+	},
+	
+	"shareData":{
+		"headTitle":"CHIease",
+		"topBtn":"Download",
+		"topTitle":"CHIease",
+		"downloadAppleUrl":"https://itunes.apple.com/cn/app/chiease/id1454486250?ls=1&mt=8",
+		"downloadGPUrl":"https://play.google.com/store/apps/details?id=com.fiveidea.chiease",
+		"downloadMyappUrl":"https://sj.qq.com/myapp/detail.htm?apkName=com.fiveidea.chiease",
+		"challengeBtn" :"我要挑战",
+		"pronounce":"发音",
+		"fluency":"流畅度",
+		"intact":"完整度",
+		"accuracy":"正确率",
+		"bestTitle":"表现最佳的句子",
+		"recordText01":"我的录音",
+		"recordText02":"原音",
+		"scoreText":"分"
+	},
+	
+	"shareSpoken":{
+		"title":"口语课",
+		"pronounce":"发音",
+		"intact":"完整度",
+		"fluency":"流畅度",
+		"accuracy":"正确率",
+		"headTypeText":"学习与闯关",
+		"headGetText":"获得了"
+	},
+	
+	"shareReport":{
+		"title":"测试报告",	
+		"headTitleText01" :"你的朋友在CHIease测试汉语水平取得了Lv.",
+		"headTitleText02" :"的好成绩～",
+		"reportTitleText":"WHAT YOU CAN DO",
+		"reportAdTitle":"IMPROVE PLAN",
+		"reportAdDes":"只有适合自己的学习方案，才能针对性的针对自己的弱点，获得高效提升"
+	},
+	
+	"shareDub":{
+		"title":"配音课",	
+		"score_text01":"本段配音得分",
+		"score_text02":"超过了",
+		"score_text03":"的用户"
+	},
+	
+	"sharePunch":{
+		"title":"打卡",	
+		"headText01":"你的朋友在CHIease已连续",
+		"headText02":"打卡",
+		"headText03":"天",
+		"punchBtnText":"我也要打卡"
+	},
+	
+	"shareCustom":{
+		"title":"定制课",	
+		"headText01":"你的朋友在CHIease学习汉语",
+		"headText02":"取得了",
+		"headText03":"分的好成绩～",
+		"coin":"五行币",
+		"totalCoinText":"共获得",
+		"rightTitle":"答题正确",
+		"initiativeTitle":"主动录音"
+	},
+	
+	"subjectResult":{
+		"title":"测试报告",
+		"downloadBtn":"前往App查看详情",
+		"reportTitleText":"您的汉语能力",
+		"reportDes":"Use clear and standard Chinese to describe the basic points of common topic at work.",
+		"reportDes2":"下载App可进行针对性汉语水平测试，获取完整测试报告提升就业竞争力。",
+		"popTitle":"请选择下载渠道",
+		"closeBtnText":"取消"
 	}
+	
 }
